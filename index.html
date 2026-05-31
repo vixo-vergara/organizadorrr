@@ -1,0 +1,1118 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>Mi rinconcito</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&family=Playfair+Display:wght@500;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#fbf7f0;--card:#fffdf9;--ink:#25212a;--muted:#827989;--line:#ebe2d8;
+  --lav:#c9b8ef;--lav2:#f0eafd;--lavd:#7867a9;
+  --sage:#a9cdb3;--sage2:#eaf5ed;--saged:#5f9670;
+  --navy:#14243d;--gold:#d2a76f;--bad:#c76565;--badbg:#fae7e7;
+  --shadow:0 18px 45px rgba(35,25,52,.08);
+}
+*{box-sizing:border-box}
+body{margin:0;background:radial-gradient(circle at top left,#f1eafe,transparent 34%),radial-gradient(circle at bottom right,#e5f4ea,transparent 30%),var(--bg);font-family:'DM Sans',sans-serif;color:var(--ink)}
+button,input,select,textarea{font:inherit}button{cursor:pointer}
+.app{display:grid;grid-template-columns:245px 1fr;min-height:100vh}
+.side{background:linear-gradient(180deg,#162641,#101a2d);color:#fff;padding:24px;position:sticky;top:0;height:100vh;overflow-y:auto;display:flex;flex-direction:column}
+.brand{font-family:'Playfair Display',serif;font-size:26px;margin:0}
+.tiny{font-size:11px;color:rgba(255,255,255,.45);margin-top:2px}
+.profile-pill{margin:18px 0;padding:12px;border:1px solid rgba(255,255,255,.12);border-radius:16px;background:rgba(255,255,255,.06)}
+.avatar{width:38px;height:38px;border-radius:50%;display:grid;place-items:center;background:var(--lav);color:#1b1630;font-size:20px;margin-bottom:6px}
+.avatar img{width:38px;height:38px;border-radius:50%;object-fit:cover}
+.nav{display:grid;gap:5px}
+.nav button{border:0;background:transparent;color:rgba(255,255,255,.55);text-align:left;padding:9px 11px;border-radius:11px;font-size:13px;transition:all .15s}
+.nav button.active,.nav button:hover{background:rgba(255,255,255,.1);color:#fff}
+.sync{font-size:10px;color:rgba(255,255,255,.35);display:flex;align-items:center;gap:4px;margin-top:6px}
+.sync-dot{width:6px;height:6px;border-radius:50%;background:#a9cdb3;flex-shrink:0}
+.sync-dot.saving{background:#d2a76f;animation:pulse .8s infinite}
+.sync-dot.error{background:#c76565}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.3}}
+.quote-side{margin-top:auto;padding-top:16px;color:rgba(255,255,255,.32);font-size:11px;line-height:1.6;font-style:italic;border-top:1px solid rgba(255,255,255,.08)}
+
+.main{padding:24px 28px;max-width:1200px;width:100%;margin:auto}
+.page{display:none}.page.active{display:block}
+.top{display:flex;justify-content:space-between;gap:16px;align-items:flex-start;margin-bottom:20px}
+h1{font-family:'Playfair Display',serif;font-size:32px;margin:0}
+h2{font-family:'Playfair Display',serif;font-size:20px;margin:0 0 12px}
+h3{font-family:'Playfair Display',serif;font-size:16px;margin:0 0 10px}
+.sub{color:var(--muted);margin-top:4px;font-size:13px}
+.grid{display:grid;gap:14px}
+.g2{grid-template-columns:repeat(2,minmax(0,1fr))}
+.g3{grid-template-columns:repeat(3,minmax(0,1fr))}
+.g4{grid-template-columns:repeat(4,minmax(0,1fr))}
+.card{background:rgba(255,253,249,.9);backdrop-filter:blur(10px);border:1px solid var(--line);border-radius:20px;padding:16px;box-shadow:var(--shadow)}
+.stat b{font-family:'Playfair Display',serif;font-size:28px;display:block;margin:4px 0}
+.stat span{color:var(--muted);font-size:12px}
+label{display:block;margin:0 0 4px;color:var(--muted);font-size:11px;text-transform:uppercase;letter-spacing:.06em}
+.row{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:10px}
+.row3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;margin-bottom:10px}
+input,select,textarea{width:100%;border:1px solid var(--line);background:#f7f1eb;border-radius:11px;padding:9px 11px;color:var(--ink);outline:none;font-size:13px}
+input:focus,select:focus,textarea:focus{border-color:var(--lavd)}
+textarea{resize:vertical}
+.btn{border:0;background:var(--lavd);color:#fff;border-radius:11px;padding:9px 14px;font-weight:600;font-size:13px;transition:opacity .15s}
+.btn:hover{opacity:.85}
+.btn.sage{background:var(--saged)}
+.btn.ghost{background:transparent;color:var(--muted);border:1px solid var(--line)}
+.btn.bad{background:transparent;color:var(--bad);border:1px solid #efd0d0;padding:5px 9px;font-size:11px}
+.btn.sm{padding:6px 10px;font-size:12px}
+.btn.google{background:#fff;color:#333;border:1px solid var(--line);display:flex;align-items:center;gap:8px;justify-content:center;font-size:14px;padding:12px 20px;border-radius:12px}
+.btn.google img{width:18px}
+.list{display:grid;gap:8px}
+.item{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:10px 12px;border-radius:13px;background:#f8f1eb;border:1px solid var(--line)}
+.badge{font-size:10px;border-radius:99px;padding:3px 8px;background:var(--lav2);color:#64518f;white-space:nowrap}
+.badge.sage{background:var(--sage2);color:#497c58}
+.badge.bad{background:var(--badbg);color:var(--bad)}
+.badge.navy{background:#e8edf5;color:#2a4a7f}
+.bar{height:7px;background:#e9ded4;border-radius:99px;overflow:hidden;margin-top:6px}
+.bar i{display:block;height:100%;background:var(--lavd);border-radius:99px;transition:width .4s}
+
+/* LOGIN */
+.login-screen{position:fixed;inset:0;background:linear-gradient(135deg,#162641,#1a0e3a 50%,#0d1f15 100%);display:flex;flex-direction:column;align-items:center;justify-content:center;z-index:100;gap:20px;text-align:center;padding:24px}
+.login-screen.hidden{display:none}
+.login-logo{font-family:'Playfair Display',serif;font-size:44px;color:#fff;margin:0}
+.login-sub{color:rgba(255,255,255,.5);font-size:14px;max-width:320px;line-height:1.6;margin:0}
+.login-card{background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.12);border-radius:22px;padding:26px;width:min(360px,100%)}
+.login-card h3{color:#fff;font-family:'Playfair Display',serif;font-size:20px;margin:0 0 6px}
+.login-card .sub{color:rgba(255,255,255,.4);margin-bottom:18px}
+.login-quote{color:rgba(255,255,255,.3);font-style:italic;font-size:12px;max-width:280px;margin:0}
+
+/* MODAL */
+.modal{position:fixed;inset:0;background:rgba(15,16,24,.55);display:none;place-items:center;padding:18px;z-index:50;overflow-y:auto}
+.modal.show{display:grid}
+.modal .card{width:min(580px,100%);max-height:90vh;overflow-y:auto}
+
+/* HORARIO */
+.sch-grid{display:grid;grid-template-columns:90px repeat(6,1fr);gap:3px;font-size:11px}
+.sch-head{background:var(--navy);color:#fff;padding:5px 4px;border-radius:7px;text-align:center;font-weight:700;font-size:10px}
+.sch-time{color:var(--muted);padding:3px 4px;display:flex;align-items:center;font-size:10px}
+.sch-cell{min-height:34px;border-radius:7px;padding:4px 5px;background:#f0ebe3;border:1px solid var(--line);font-size:10px;line-height:1.3}
+.sch-cell.fixed{background:#4a7fc1;color:#fff;border-color:#3a6aaa}
+.sch-cell.study{background:#9b6bbf;color:#fff;border-color:#8a5aae}
+
+/* CERTAMEN CHIP */
+.cert-chip{background:var(--lav2);border:1px solid var(--lav);border-radius:14px;padding:14px;margin-bottom:8px}
+.cert-head{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:10px}
+.cert-name{font-weight:700;font-size:14px}
+.cert-meta{font-size:11px;color:var(--muted);margin-top:2px}
+.tema-row{display:flex;align-items:center;gap:8px;padding:5px 0;border-bottom:1px solid rgba(180,160,210,.25)}
+.tema-row:last-child{border-bottom:none}
+.tema-row input[type=checkbox]{width:15px;height:15px;accent-color:var(--lavd);flex-shrink:0;cursor:pointer}
+.tema-row label{text-transform:none;letter-spacing:0;font-size:12px;margin:0;color:var(--ink);cursor:pointer;flex:1}
+.tema-row label.done{text-decoration:line-through;opacity:.4}
+.tema-row .del-tema{background:none;border:none;color:#bbb;font-size:13px;cursor:pointer;padding:0 4px}
+.tema-row .del-tema:hover{color:var(--bad)}
+
+/* TABLA */
+.tabla{width:100%;border-collapse:collapse;font-size:12px}
+.tabla th{text-align:left;color:var(--muted);font-size:10px;text-transform:uppercase;letter-spacing:.06em;padding:7px 8px;border-bottom:2px solid var(--line)}
+.tabla td{padding:7px 8px;border-bottom:1px solid var(--line);vertical-align:middle}
+.tabla tr:last-child td{border-bottom:none}
+.tabla tbody tr:hover td{background:rgba(200,180,230,.06)}
+
+/* POMODORO */
+.pomo-ring{width:120px;height:120px;margin:0 auto 12px;position:relative}
+.pomo-ring svg{transform:rotate(-90deg)}
+.pomo-ring .track{fill:none;stroke:#e9ded4;stroke-width:7}
+.pomo-ring .prog{fill:none;stroke:var(--lavd);stroke-width:7;stroke-linecap:round;transition:stroke-dashoffset .9s linear}
+.pomo-time{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-family:'Playfair Display',serif;font-size:24px;color:var(--ink)}
+
+/* VENTAS SEMANA */
+.ventas-semana{display:grid;grid-template-columns:repeat(7,1fr);gap:4px;margin-top:8px}
+.dia-cell{background:#f8f1eb;border:1px solid var(--line);border-radius:10px;padding:8px 4px;text-align:center}
+.dia-cell .dn{font-size:10px;color:var(--muted);text-transform:uppercase;margin-bottom:4px}
+.dia-cell .dt{font-family:'Playfair Display',serif;font-size:14px;font-weight:700}
+.dia-cell.hoy{border-color:var(--lavd);background:var(--lav2)}
+
+/* NOTAS */
+.nota-card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:14px}
+.nota-card.done-card{opacity:.55}
+.prio-alta{border-left:3px solid var(--bad)}
+.prio-media{border-left:3px solid var(--gold)}
+.prio-baja{border-left:3px solid var(--saged)}
+
+@media(max-width:760px){
+  .app{grid-template-columns:1fr}.side{position:relative;height:auto;flex-direction:row;flex-wrap:wrap;gap:8px}
+  .quote-side{display:none}.main{padding:16px}
+  .g2,.g3,.g4,.row,.row3{grid-template-columns:1fr}
+  .top{display:block}.nav{grid-template-columns:repeat(3,1fr)}
+  .sch-grid{grid-template-columns:60px repeat(6,1fr)}
+  .ventas-semana{grid-template-columns:repeat(4,1fr)}
+}
+</style>
+</head>
+<body>
+
+<!-- LOGIN -->
+<div class="login-screen" id="loginScreen">
+  <p class="login-logo">🌙 Mi rinconcito</p>
+  <p class="login-sub">Tu espacio personal. Cada persona tiene el suyo, separado y guardado en la nube.</p>
+  <div class="login-card">
+    <h3>Entrar</h3>
+    <p class="sub">Usa tu cuenta de Google para acceder.</p>
+    <button class="btn google" onclick="loginGoogle()" style="width:100%">
+      <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" alt="">
+      Entrar con Google
+    </button>
+    <p id="loginError" style="color:#ead0d8;font-size:11px;margin-top:8px;display:none"></p>
+  </div>
+  <p class="login-quote" id="loginQuote"></p>
+</div>
+
+<!-- APP -->
+<div class="app" id="appShell" style="display:none">
+<aside class="side">
+  <h2 class="brand">Mi rinconcito</h2>
+  <div class="tiny">dashboard personal</div>
+  <div class="profile-pill">
+    <div class="avatar" id="avatar">🌙</div>
+    <b id="profileName" style="font-size:13px">—</b>
+    <div class="tiny" id="profileEmail"></div>
+    <div class="sync"><div class="sync-dot" id="syncDot"></div><span id="syncLabel">sincronizado</span></div>
+    <button class="btn ghost" style="margin-top:8px;color:rgba(255,255,255,.6);border-color:rgba(255,255,255,.15);width:100%;font-size:11px" onclick="doSignOut()">Cerrar sesión</button>
+  </div>
+  <div class="nav" id="nav"></div>
+  <div class="quote-side" id="quoteSide"></div>
+</aside>
+
+<main class="main">
+
+<!-- INICIO -->
+<section id="home" class="page active">
+  <div class="top">
+    <div>
+      <h1 id="hello">Hola 🌙</h1>
+      <p class="sub" id="homeDate"></p>
+    </div>
+    <button class="btn ghost sm" onclick="exportData()">Exportar backup</button>
+  </div>
+  <div class="grid g4">
+    <div class="card stat"><span>Próxima evaluación</span><b id="nextEval">—</b><div class="tiny" id="nextEvalName" style="color:var(--muted)">sin fechas</div></div>
+    <div class="card stat"><span>Temas listos</span><b id="topicsStat">0/0</b><div class="bar"><i id="topicsBar" style="width:0%"></i></div></div>
+    <div class="card stat"><span>Ventas hoy</span><b id="salesToday">$0</b><div class="tiny" style="color:var(--muted)">mi tienda</div></div>
+    <div class="card stat"><span>Balance mes</span><b id="balanceMonth">$0</b><div class="tiny" style="color:var(--muted)">ingresos - gastos</div></div>
+  </div>
+  <div class="grid g2" style="margin-top:14px">
+    <div class="card">
+      <h3>Bloques sugeridos hoy</h3>
+      <p class="sub" style="margin-bottom:10px;font-size:12px">Según tus certámenes y su dificultad</p>
+      <div id="todayBlocks" class="list"></div>
+    </div>
+    <div class="card" style="display:flex;align-items:center;justify-content:center;text-align:center;min-height:120px">
+      <p id="homeQuote" style="font-style:italic;color:var(--muted);font-size:15px;line-height:1.7;margin:0;max-width:300px"></p>
+    </div>
+  </div>
+</section>
+
+<!-- ESTUDIO -->
+<section id="study" class="page">
+  <div class="top">
+    <div><h1>Estudio</h1><p class="sub">Certámenes, temas y tu horario semanal.</p></div>
+    <button class="btn sm" onclick="openAddCert()">+ Nuevo certamen</button>
+  </div>
+
+  <!-- HORARIO -->
+  <div class="card" style="margin-bottom:16px">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px">
+      <h3 style="margin:0">Mi horario semanal</h3>
+      <button class="btn sm ghost" onclick="openEditSchedule()">✏️ Editar horario</button>
+    </div>
+    <div style="display:flex;gap:12px;flex-wrap:wrap;margin-bottom:10px;font-size:11px">
+      <span style="display:flex;align-items:center;gap:5px"><span style="width:11px;height:11px;background:#4a7fc1;border-radius:3px;display:inline-block"></span>Clases / trabajo fijo</span>
+      <span style="display:flex;align-items:center;gap:5px"><span style="width:11px;height:11px;background:#9b6bbf;border-radius:3px;display:inline-block"></span>Bloque de estudio sugerido</span>
+    </div>
+    <div id="scheduleView" style="overflow-x:auto"></div>
+  </div>
+
+  <!-- CERTÁMENES + POMODORO -->
+  <div class="grid g2">
+    <div>
+      <h3 style="margin-bottom:12px">Mis certámenes</h3>
+      <div id="certsList"></div>
+    </div>
+    <div class="card">
+      <h3 style="margin-bottom:6px">⏱ Pomodoro</h3>
+      <div class="pomo-ring" style="margin-top:12px">
+        <svg viewBox="0 0 120 120" width="120" height="120">
+          <circle class="track" cx="60" cy="60" r="50"/>
+          <circle class="prog" id="pomoRing" cx="60" cy="60" r="50" stroke-dasharray="314" stroke-dashoffset="0"/>
+        </svg>
+        <div class="pomo-time" id="pomoTime">25:00</div>
+      </div>
+      <div style="display:flex;gap:6px;justify-content:center;margin-top:8px">
+        <button class="btn sm" onclick="pomoStart()">▶</button>
+        <button class="btn sm ghost" onclick="pomoPause()">⏸</button>
+        <button class="btn sm ghost" onclick="pomoReset()">↺</button>
+      </div>
+      <div style="display:flex;gap:6px;justify-content:center;margin-top:8px">
+        <button class="btn sm ghost" onclick="pomoSet(25)">25 min</button>
+        <button class="btn sm ghost" onclick="pomoSet(50)">50 min</button>
+        <button class="btn sm ghost" onclick="pomoSet(5)">5 descanso</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- TIENDA -->
+<section id="shop" class="page">
+  <div class="top">
+    <div><h1>Mi tienda</h1><p class="sub">Inventario, ventas y análisis.</p></div>
+    <div style="display:flex;gap:8px">
+      <button class="btn ghost sm" onclick="openCierre()">📦 Cierre de caja</button>
+      <button class="btn sm" onclick="openAddProduct()">+ Producto</button>
+    </div>
+  </div>
+
+  <div class="grid g3" style="margin-bottom:14px">
+    <div class="card stat"><span>Ventas hoy</span><b id="shopHoy">$0</b></div>
+    <div class="card stat"><span>Producto estrella</span><b id="shopStar" style="font-size:18px">—</b><div class="tiny" id="shopStarSub" style="color:var(--muted)"></div></div>
+    <div class="card stat"><span>Total histórico</span><b id="shopTotal">$0</b></div>
+  </div>
+
+  <div class="card" style="margin-bottom:14px">
+    <h3>Ventas esta semana</h3>
+    <div class="ventas-semana" id="ventasSemana"></div>
+  </div>
+
+  <!-- INVENTARIO TABLA -->
+  <div class="card" style="margin-bottom:14px">
+    <h3>Inventario</h3>
+    <div style="overflow-x:auto;margin-top:10px">
+      <table class="tabla">
+        <thead><tr>
+          <th>Producto</th><th>Precio venta</th><th>Costo</th><th>Ganancia unit.</th><th>Stock vitrina</th><th>Stock bodega</th><th>Ganancia si vende todo</th><th></th>
+        </tr></thead>
+        <tbody id="inventarioBody"></tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- REGISTRAR VENTA + HISTORIAL -->
+  <div class="grid g2">
+    <div class="card">
+      <h3>Registrar venta</h3>
+      <div class="row" style="margin-top:10px">
+        <div><label>Producto</label><select id="saleProduct"></select></div>
+        <div><label>Cantidad</label><input id="saleQty" type="number" min="1" value="1"></div>
+      </div>
+      <button class="btn sage" onclick="addSale()" style="width:100%">Registrar venta</button>
+    </div>
+    <div class="card">
+      <h3>Historial de ventas</h3>
+      <div style="overflow-x:auto;margin-top:8px">
+        <table class="tabla">
+          <thead><tr><th>Fecha</th><th>Producto</th><th>Cant.</th><th>Total</th><th>Ganancia</th><th></th></tr></thead>
+          <tbody id="salesBody"></tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- GASTOS -->
+<section id="money" class="page">
+  <div class="top">
+    <div><h1>Gastos</h1><p class="sub">Ingresos y egresos del mes.</p></div>
+    <button class="btn sm" onclick="openAddMove()">+ Movimiento</button>
+  </div>
+  <div class="grid g4" style="margin-bottom:14px">
+    <div class="card stat"><span>Ingresos mes</span><b id="incMonth">$0</b></div>
+    <div class="card stat"><span>Gastos mes</span><b id="expMonth">$0</b></div>
+    <div class="card stat"><span>Balance</span><b id="balanceMes">$0</b></div>
+    <div class="card stat"><span>Mayor categoría</span><b id="bigCat" style="font-size:18px">—</b></div>
+  </div>
+  <div class="grid g2">
+    <div class="card">
+      <h3>Por categoría</h3>
+      <div id="moneyBars" style="margin-top:10px"></div>
+    </div>
+    <div class="card">
+      <h3>Historial</h3>
+      <div style="overflow-x:auto;margin-top:8px">
+        <table class="tabla">
+          <thead><tr><th>Fecha</th><th>Tipo</th><th>Categoría</th><th>Detalle</th><th>Monto</th><th></th></tr></thead>
+          <tbody id="moneyBody"></tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- RECORDATORIOS -->
+<section id="notes" class="page">
+  <div class="top">
+    <div><h1>Recordatorios</h1><p class="sub">Cosas importantes que no quieres olvidar.</p></div>
+    <button class="btn sm" onclick="openAddNote()">+ Nuevo</button>
+  </div>
+  <div id="notesList" class="grid g2" style="margin-top:4px"></div>
+</section>
+
+<!-- AJUSTES -->
+<section id="settings" class="page">
+  <h1>Ajustes</h1><p class="sub">Tu cuenta y datos.</p>
+  <div class="grid g2" style="margin-top:16px">
+    <div class="card">
+      <h3>Tu cuenta</h3>
+      <div class="item" style="margin-top:10px">
+        <div><b id="settingsName">—</b><div class="tiny" id="settingsEmail" style="color:var(--muted)">—</div></div>
+        <button class="btn bad" onclick="doSignOut()">Salir</button>
+      </div>
+      <p class="sub" style="margin-top:10px;font-size:12px">Tus datos se guardan en Firebase bajo tu cuenta de Google. Accede desde cualquier dispositivo.</p>
+    </div>
+    <div class="card">
+      <h3>Backup de datos</h3>
+      <p class="sub" style="font-size:12px">Exporta todo como JSON por si acaso.</p>
+      <button class="btn" onclick="exportData()" style="margin-top:10px;width:100%">Exportar backup JSON</button>
+      <div style="margin-top:12px">
+        <label>Importar backup</label>
+        <input type="file" accept=".json" onchange="importData(event)">
+      </div>
+    </div>
+  </div>
+</section>
+
+</main>
+</div>
+
+<!-- MODAL: Nuevo certamen -->
+<div id="certModal" class="modal">
+  <div class="card">
+    <h2>Nuevo certamen / evaluación</h2>
+    <div class="row" style="margin-top:12px">
+      <div><label>Ramo</label><input id="certRamo" placeholder="Contabilidad 2, Cálculo..."></div>
+      <div><label>Nombre evaluación</label><input id="certNombre" placeholder="Certamen 1, Control 3..."></div>
+    </div>
+    <div class="row">
+      <div><label>Fecha</label><input id="certFecha" type="date"></div>
+      <div><label>Dificultad</label>
+        <select id="certDiff">
+          <option value="3">Alta</option>
+          <option value="2" selected>Media</option>
+          <option value="1">Baja</option>
+        </select>
+      </div>
+    </div>
+    <div style="margin-bottom:12px">
+      <label style="margin-bottom:6px">Temas que entran</label>
+      <div style="display:flex;gap:6px;margin-bottom:8px">
+        <input id="temaInput" placeholder="Escribe un tema y presiona +" style="flex:1">
+        <button class="btn sm" onclick="addTemaTemp()">+</button>
+      </div>
+      <div id="temasTemp" class="list"></div>
+    </div>
+    <div style="display:flex;gap:8px">
+      <button class="btn" onclick="saveCert()">Guardar certamen</button>
+      <button class="btn ghost" onclick="closeCertModal()">Cancelar</button>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL: Editar horario -->
+<div id="scheduleModal" class="modal">
+  <div class="card">
+    <h2>Mi horario semanal</h2>
+    <p class="sub" style="margin-bottom:14px;font-size:12px">Agrega tus bloques fijos (clases, trabajo). Los bloques de estudio se calculan automáticamente según tus certámenes.</p>
+    <div class="row">
+      <div><label>Día</label>
+        <select id="schDay">
+          <option value="0">Lunes</option><option value="1">Martes</option>
+          <option value="2">Miércoles</option><option value="3">Jueves</option>
+          <option value="4">Viernes</option><option value="5">Sábado</option>
+        </select>
+      </div>
+      <div><label>Bloque</label>
+        <select id="schBlock">
+          <option value="0">Bloque 1-2 (8:15–9:25)</option>
+          <option value="1">Bloque 3-4 (9:40–10:50)</option>
+          <option value="2">Bloque 5-6 (11:05–12:15)</option>
+          <option value="3">Bloque 7-8 (12:30–13:40)</option>
+          <option value="4">Bloque 9-10 (14:40–15:50)</option>
+          <option value="5">Bloque 11-12 (16:05–17:15)</option>
+          <option value="6">Bloque 13-14 (17:30–18:40)</option>
+        </select>
+      </div>
+    </div>
+    <div class="row">
+      <div><label>Descripción</label><input id="schDesc" placeholder="Cálculo Integral, Gym, Trabajo..."></div>
+      <div><label>Tipo</label>
+        <select id="schType">
+          <option value="fixed">Clase / trabajo fijo</option>
+          <option value="work">Trabajo part-time</option>
+          <option value="free">Tiempo libre</option>
+        </select>
+      </div>
+    </div>
+    <div style="margin-bottom:14px">
+      <button class="btn" onclick="addScheduleBlock()">+ Agregar bloque</button>
+    </div>
+    <div id="scheduleList" class="list"></div>
+    <button class="btn ghost" onclick="closeScheduleModal()" style="margin-top:14px;width:100%">Cerrar</button>
+  </div>
+</div>
+
+<!-- MODAL: Agregar producto -->
+<div id="productModal" class="modal">
+  <div class="card">
+    <h2 id="productModalTitle">Agregar producto</h2>
+    <div class="row" style="margin-top:12px">
+      <div><label>Nombre</label><input id="mpName" placeholder="Milka, bebida..."></div>
+      <div><label>Precio de venta ($)</label><input id="mpPrice" type="number" placeholder="1000"></div>
+    </div>
+    <div class="row">
+      <div><label>Costo ($)</label><input id="mpCost" type="number" placeholder="600"></div>
+      <div><label>Stock vitrina</label><input id="mpShow" type="number" value="0"></div>
+    </div>
+    <div class="row">
+      <div><label>Stock bodega</label><input id="mpHome" type="number" value="0"></div>
+      <div><label>Canal</label>
+        <select id="mpChannel">
+          <option value="vitrina">Vitrina (presencial)</option>
+          <option value="online">Online</option>
+          <option value="ambos">Ambos</option>
+          <option value="no">No aplica</option>
+        </select>
+      </div>
+    </div>
+    <input type="hidden" id="mpEditId">
+    <div style="display:flex;gap:8px">
+      <button class="btn sage" onclick="saveProduct()">Guardar</button>
+      <button class="btn ghost" onclick="closeProductModal()">Cancelar</button>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL: Cierre de caja -->
+<div id="cierreModal" class="modal">
+  <div class="card">
+    <h2>📦 Cierre de caja</h2>
+    <p class="sub" style="font-size:12px;margin-bottom:14px">El resumen se guardará en el historial y las ventas del período se reiniciarán.</p>
+    <div id="cierreResumen" style="margin:14px 0"></div>
+    <div style="display:flex;gap:8px">
+      <button class="btn" style="background:var(--bad)" onclick="doCierre()">Confirmar cierre</button>
+      <button class="btn ghost" onclick="closeCierreModal()">Cancelar</button>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL: Nuevo movimiento -->
+<div id="moveModal" class="modal">
+  <div class="card">
+    <h2>Nuevo movimiento</h2>
+    <div class="row" style="margin-top:12px">
+      <div><label>Tipo</label><select id="moveType"><option value="gasto">Gasto</option><option value="ingreso">Ingreso</option></select></div>
+      <div><label>Categoría</label>
+        <select id="moveCat">
+          <option>Comida</option><option>Transporte</option><option>Ropa</option>
+          <option>Educación</option><option>Salud</option><option>Ocio</option>
+          <option>Pyme</option><option>Otro</option>
+        </select>
+      </div>
+    </div>
+    <div class="row">
+      <div><label>Monto ($)</label><input id="moveAmount" type="number" placeholder="0"></div>
+      <div><label>Detalle</label><input id="moveDesc" placeholder="almuerzo, uber..."></div>
+    </div>
+    <div style="display:flex;gap:8px">
+      <button class="btn" onclick="saveMove()">Guardar</button>
+      <button class="btn ghost" onclick="closeMoveModal()">Cancelar</button>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL: Nuevo recordatorio -->
+<div id="noteModal" class="modal">
+  <div class="card">
+    <h2>Nuevo recordatorio</h2>
+    <div style="margin-top:12px">
+      <label>Título</label>
+      <input id="noteTitulo" placeholder="ej. Llamar al banco, Comprar..." style="margin-bottom:10px">
+      <label>Detalle</label>
+      <textarea id="noteText" rows="3" placeholder="Más info, link, lo que necesites..." style="margin-bottom:10px"></textarea>
+      <div class="row">
+        <div><label>Prioridad</label>
+          <select id="notePrio">
+            <option value="alta">🔴 Alta</option>
+            <option value="media" selected>🟡 Media</option>
+            <option value="baja">🟢 Baja</option>
+          </select>
+        </div>
+        <div><label>Fecha límite (opcional)</label><input id="noteFecha" type="date"></div>
+      </div>
+    </div>
+    <div style="display:flex;gap:8px;margin-top:10px">
+      <button class="btn" onclick="saveNote()">Guardar</button>
+      <button class="btn ghost" onclick="closeNoteModal()">Cancelar</button>
+    </div>
+  </div>
+</div>
+
+<script type="module">
+import { auth, provider, db, signInWithPopup, signOut, onAuthStateChanged, doc, setDoc, getDoc, onSnapshot } from './firebase-config.js';
+
+// ── QUOTES ────────────────────────────────────────────────────────────────────
+const QUOTES = [
+  'Lo esencial es invisible a los ojos.',
+  'Las ballenas no se apuran: avanzan profundo.',
+  'Los días lindos también se construyen con cosas pequeñas.',
+  'Un bloque a la vez, sin pelearse con la vida.',
+  'Volver a intentarlo también cuenta como avanzar.',
+  'No tienes que ser perfecto para ser constante.',
+  'A veces avanzar es solo no rendirse hoy.',
+  'Las cosas pequeñas son las que más se recuerdan.',
+  'Estudiar con calma también es rendirse bien.',
+  'Cada paso que diste hoy cuenta.',
+  'Tranquilo, lo estás haciendo bien.',
+  'La constancia le gana a la intensidad.',
+];
+
+const DAYS  = ['Lunes','Martes','Miércoles','Jueves','Viernes','Sábado'];
+const BLOCKS = ['8:15–9:25','9:40–10:50','11:05–12:15','12:30–13:40','14:40–15:50','16:05–17:15','17:30–18:40'];
+const PAGES  = [['home','🌙 Inicio'],['study','📚 Estudio'],['shop','🍫 Tienda'],['money','💸 Gastos'],['notes','📌 Recordatorios'],['settings','⚙️ Ajustes']];
+
+// ── STATE ─────────────────────────────────────────────────────────────────────
+let currentUser = null, data = null, saveTimeout = null, unsubscribe = null;
+let temasTemp = [];
+
+function blank(name, email) {
+  return {
+    name, email,
+    studyMode: 'aplicado',
+    certs: [], schedule: [],
+    products: [], sales: [], cierres: [],
+    moves: [], notes: []
+  };
+}
+
+// ── AUTH ──────────────────────────────────────────────────────────────────────
+window.loginGoogle = async () => {
+  document.getElementById('loginError').style.display = 'none';
+  try { await signInWithPopup(auth, provider); }
+  catch(e) { const el=document.getElementById('loginError'); el.textContent='Error: '+e.message; el.style.display='block'; }
+};
+window.doSignOut = async () => {
+  if(unsubscribe) unsubscribe();
+  await signOut(auth);
+  data=null; currentUser=null;
+  document.getElementById('appShell').style.display='none';
+  document.getElementById('loginScreen').classList.remove('hidden');
+};
+onAuthStateChanged(auth, async user => {
+  if(user){
+    currentUser=user;
+    document.getElementById('loginScreen').classList.add('hidden');
+    document.getElementById('appShell').style.display='grid';
+    await loadUserData(); listenUserData(); renderNav(); render();
+  } else {
+    document.getElementById('loginScreen').classList.remove('hidden');
+    document.getElementById('appShell').style.display='none';
+  }
+});
+
+// ── FIRESTORE ─────────────────────────────────────────────────────────────────
+const userRef = () => doc(db,'users',currentUser.uid,'data','main');
+async function loadUserData(){
+  setSyncState('saving');
+  try {
+    const snap = await getDoc(userRef());
+    data = snap.exists() ? snap.data() : blank(currentUser.displayName||currentUser.email.split('@')[0], currentUser.email);
+    if(!snap.exists()) await setDoc(userRef(), data);
+    setSyncState('ok');
+  } catch(e) {
+    setSyncState('error');
+    const local = localStorage.getItem('bk_'+currentUser.uid);
+    data = local ? JSON.parse(local) : blank(currentUser.displayName||'Usuario', currentUser.email);
+  }
+}
+function listenUserData(){
+  if(unsubscribe) unsubscribe();
+  unsubscribe = onSnapshot(userRef(), snap=>{ if(snap.exists()){data=snap.data();render();setSyncState('ok');} }, ()=>setSyncState('error'));
+}
+function scheduleSave(){
+  setSyncState('saving');
+  if(saveTimeout) clearTimeout(saveTimeout);
+  saveTimeout = setTimeout(async()=>{
+    try { await setDoc(userRef(),data); localStorage.setItem('bk_'+currentUser.uid,JSON.stringify(data)); setSyncState('ok'); }
+    catch(e){ setSyncState('error'); }
+  },800);
+}
+function setSyncState(s){
+  const dot=document.getElementById('syncDot'),lbl=document.getElementById('syncLabel');
+  if(!dot)return;
+  dot.className='sync-dot'+(s==='saving'?' saving':s==='error'?' error':'');
+  lbl.textContent=s==='saving'?'guardando...' : s==='error'?'sin conexión' : 'sincronizado';
+}
+function save(){ scheduleSave(); render(); }
+
+// ── UTILS ─────────────────────────────────────────────────────────────────────
+const fmt = n => '$'+Math.round(n||0).toLocaleString('es-CL');
+const today = () => new Date().toISOString().slice(0,10);
+const month = () => today().slice(0,7);
+function daysUntil(d){ const a=new Date();a.setHours(0,0,0,0);const b=new Date(d+'T12:00:00');b.setHours(0,0,0,0);return Math.round((b-a)/86400000); }
+function getTodayDow(){ return (new Date().getDay()+6)%7; }
+
+// ── NAV ───────────────────────────────────────────────────────────────────────
+function renderNav(){
+  document.getElementById('nav').innerHTML=PAGES.map(([id,t],i)=>
+    `<button class="${i===0?'active':''}" onclick="page('${id}',this)">${t}</button>`).join('');
+}
+window.page=(id,btn)=>{
+  document.querySelectorAll('.page').forEach(x=>x.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  document.querySelectorAll('.nav button').forEach(x=>x.classList.remove('active'));
+  btn.classList.add('active'); render();
+};
+window.setField=(k,v)=>{ if(!data)return; data[k]=v; save(); };
+
+// ── SCHEDULE ──────────────────────────────────────────────────────────────────
+window.openEditSchedule=()=>{ renderScheduleList(); document.getElementById('scheduleModal').classList.add('show'); };
+window.closeScheduleModal=()=>document.getElementById('scheduleModal').classList.remove('show');
+window.addScheduleBlock=()=>{
+  const day=+document.getElementById('schDay').value;
+  const block=+document.getElementById('schBlock').value;
+  const desc=document.getElementById('schDesc').value.trim();
+  const type=document.getElementById('schType').value;
+  if(!desc)return;
+  if(!data.schedule) data.schedule=[];
+  // evitar duplicado mismo dia+bloque
+  data.schedule = data.schedule.filter(x=>!(x.day===day&&x.block===block));
+  data.schedule.push({id:Date.now(),day,block,desc,type});
+  document.getElementById('schDesc').value='';
+  save(); renderScheduleList();
+};
+window.delScheduleBlock=id=>{ data.schedule=data.schedule.filter(x=>x.id!=id); save(); renderScheduleList(); };
+function renderScheduleList(){
+  document.getElementById('scheduleList').innerHTML=(data.schedule||[])
+    .sort((a,b)=>a.day-b.day||a.block-b.block)
+    .map(s=>`<div class="item"><div><b>${DAYS[s.day]}</b> · ${BLOCKS[s.block]}<div class="tiny" style="color:var(--muted)">${s.desc}</div></div>
+      <button class="btn bad" onclick="delScheduleBlock(${s.id})">✕</button></div>`).join('')
+    || '<p class="sub">Sin bloques aún.</p>';
+}
+
+function getStudySuggestions(){
+  const occupied = new Set((data.schedule||[]).map(s=>`${s.day}-${s.block}`));
+  const certs = (data.certs||[]).filter(c=>c.fecha&&daysUntil(c.fecha)>=0)
+    .sort((a,b)=>daysUntil(a.fecha)-daysUntil(b.fecha));
+  if(!certs.length) return [];
+  const suggestions=[], usedBlocks=new Set();
+  certs.forEach(cert=>{
+    const dl=daysUntil(cert.fecha); if(dl<0)return;
+    const diff=+cert.diff||2;
+    // bloques por semana: alta=6, media=4, baja=2
+    const blocksNeeded = diff===3?6 : diff===2?4 : 2;
+    let assigned=0;
+    for(let bi=0;bi<BLOCKS.length&&assigned<blocksNeeded;bi++){
+      for(let di=0;di<6&&assigned<blocksNeeded;di++){
+        const key=`${di}-${bi}`;
+        if(!occupied.has(key)&&!usedBlocks.has(key)){
+          suggestions.push({day:di,block:bi,cert:cert.ramo,certId:cert.id,diff});
+          usedBlocks.add(key); assigned++;
+        }
+      }
+    }
+  });
+  return suggestions;
+}
+
+function renderScheduleView(){
+  const el=document.getElementById('scheduleView'); if(!el)return;
+  const suggestions=getStudySuggestions();
+  let html=`<div class="sch-grid">`;
+  html+=`<div class="sch-head" style="background:transparent;color:var(--muted)">Bloque</div>`;
+  DAYS.forEach(d=>html+=`<div class="sch-head">${d.slice(0,3)}</div>`);
+  BLOCKS.forEach((b,bi)=>{
+    html+=`<div class="sch-time">${b}</div>`;
+    for(let di=0;di<6;di++){
+      const fixed=(data.schedule||[]).find(s=>s.day===di&&s.block===bi);
+      const study=suggestions.find(s=>s.day===di&&s.block===bi);
+      if(fixed) html+=`<div class="sch-cell fixed" title="${fixed.desc}">${fixed.desc}</div>`;
+      else if(study) html+=`<div class="sch-cell study" title="${study.cert}">📖 ${study.cert.slice(0,10)}</div>`;
+      else html+=`<div class="sch-cell"></div>`;
+    }
+  });
+  html+='</div>';
+  el.innerHTML=html;
+}
+
+// ── CERTS ─────────────────────────────────────────────────────────────────────
+window.openAddCert=()=>{
+  temasTemp=[];
+  document.getElementById('temasTemp').innerHTML='';
+  document.getElementById('certRamo').value='';
+  document.getElementById('certNombre').value='';
+  document.getElementById('certFecha').value='';
+  document.getElementById('certDiff').value='2';
+  document.getElementById('certModal').classList.add('show');
+};
+window.closeCertModal=()=>document.getElementById('certModal').classList.remove('show');
+
+window.addTemaTemp=()=>{
+  const v=document.getElementById('temaInput').value.trim(); if(!v)return;
+  temasTemp.push({id:Date.now(),name:v,done:false});
+  document.getElementById('temaInput').value='';
+  renderTemasTemp();
+};
+document.getElementById('temaInput').addEventListener('keydown',e=>{ if(e.key==='Enter'){e.preventDefault();window.addTemaTemp();} });
+
+function renderTemasTemp(){
+  document.getElementById('temasTemp').innerHTML=temasTemp.map(t=>`
+    <div class="tema-row">
+      <span style="font-size:12px;flex:1">${t.name}</span>
+      <button class="del-tema" onclick="removeTemaTemp(${t.id})">✕</button>
+    </div>`).join('');
+}
+window.removeTemaTemp=id=>{ temasTemp=temasTemp.filter(t=>t.id!=id); renderTemasTemp(); };
+
+window.saveCert=()=>{
+  const ramo=document.getElementById('certRamo').value.trim();
+  if(!ramo)return;
+  if(!data.certs) data.certs=[];
+  data.certs.push({
+    id:Date.now(),ramo,
+    nombre:document.getElementById('certNombre').value.trim(),
+    fecha:document.getElementById('certFecha').value,
+    diff:document.getElementById('certDiff').value,
+    temas:temasTemp.slice()
+  });
+  temasTemp=[];
+  document.getElementById('certModal').classList.remove('show');
+  save();
+};
+
+window.addTemaToCert=(certId)=>{
+  const input=document.getElementById('addTemaInput_'+certId);
+  const v=input.value.trim(); if(!v)return;
+  const cert=(data.certs||[]).find(c=>c.id==certId); if(!cert)return;
+  if(!cert.temas) cert.temas=[];
+  cert.temas.push({id:Date.now(),name:v,done:false});
+  input.value='';
+  save();
+};
+
+window.toggleTema=(certId,temaId)=>{
+  const cert=(data.certs||[]).find(c=>c.id==certId); if(!cert)return;
+  const tema=cert.temas.find(t=>t.id==temaId); if(!tema)return;
+  tema.done=!tema.done; save();
+};
+window.delTema=(certId,temaId)=>{
+  const cert=(data.certs||[]).find(c=>c.id==certId); if(!cert)return;
+  cert.temas=cert.temas.filter(t=>t.id!=temaId); save();
+};
+window.delCert=id=>{ data.certs=data.certs.filter(x=>x.id!=id); save(); };
+
+// ── SHOP ──────────────────────────────────────────────────────────────────────
+window.openAddProduct=(editId)=>{
+  document.getElementById('mpEditId').value=editId||'';
+  if(editId){
+    const p=(data.products||[]).find(x=>x.id==editId); if(!p)return;
+    document.getElementById('productModalTitle').textContent='Editar producto';
+    document.getElementById('mpName').value=p.name;
+    document.getElementById('mpPrice').value=p.price||0;
+    document.getElementById('mpCost').value=p.cost||0;
+    document.getElementById('mpShow').value=p.show||0;
+    document.getElementById('mpHome').value=p.home||0;
+    document.getElementById('mpChannel').value=p.channel||'vitrina';
+  } else {
+    document.getElementById('productModalTitle').textContent='Agregar producto';
+    document.getElementById('mpName').value='';
+    document.getElementById('mpPrice').value='';
+    document.getElementById('mpCost').value='';
+    document.getElementById('mpShow').value='0';
+    document.getElementById('mpHome').value='0';
+    document.getElementById('mpChannel').value='vitrina';
+  }
+  document.getElementById('productModal').classList.add('show');
+};
+window.closeProductModal=()=>document.getElementById('productModal').classList.remove('show');
+window.saveProduct=()=>{
+  const name=document.getElementById('mpName').value.trim(); if(!name)return;
+  const editId=document.getElementById('mpEditId').value;
+  const prod={
+    id: editId||('p'+Date.now()),
+    name,
+    price:+document.getElementById('mpPrice').value||0,
+    cost:+document.getElementById('mpCost').value||0,
+    show:+document.getElementById('mpShow').value||0,
+    home:+document.getElementById('mpHome').value||0,
+    channel:document.getElementById('mpChannel').value
+  };
+  if(editId){
+    const i=(data.products||[]).findIndex(x=>x.id==editId);
+    if(i>=0) data.products[i]=prod;
+  } else {
+    if(!data.products) data.products=[];
+    data.products.push(prod);
+  }
+  document.getElementById('productModal').classList.remove('show');
+  save();
+};
+window.delProduct=id=>{ data.products=data.products.filter(x=>x.id!=id); save(); };
+
+window.addSale=()=>{
+  const p=(data.products||[]).find(x=>x.id===document.getElementById('saleProduct').value);
+  const q=+document.getElementById('saleQty').value||1;
+  if(!p)return;
+  if(!data.sales) data.sales=[];
+  data.sales.push({
+    id:'s'+Date.now(), date:today(),
+    product:p.name, productId:p.id,
+    qty:q, unit:p.price, cost:p.cost||0,
+    total:p.price*q
+  });
+  p.show=Math.max(0,(p.show||0)-q);
+  save();
+};
+window.delSale=id=>{ data.sales=data.sales.filter(x=>x.id!=id); save(); };
+
+window.openCierre=()=>{ renderCierreResumen(); document.getElementById('cierreModal').classList.add('show'); };
+window.closeCierreModal=()=>document.getElementById('cierreModal').classList.remove('show');
+function renderCierreResumen(){
+  const s=data.sales||[];
+  const total=s.reduce((a,x)=>a+x.total,0);
+  const gan=s.reduce((a,x)=>a+(x.total-(x.cost||0)*x.qty),0);
+  document.getElementById('cierreResumen').innerHTML=`
+    <div class="item"><span>Total ventas período</span><b>${fmt(total)}</b></div>
+    <div class="item" style="margin-top:6px"><span>Ganancia estimada</span><b>${fmt(gan)}</b></div>
+    <div class="item" style="margin-top:6px"><span>Nº ventas</span><b>${s.length}</b></div>`;
+}
+window.doCierre=()=>{
+  const s=data.sales||[];
+  if(!data.cierres) data.cierres=[];
+  data.cierres.push({fecha:today(),ventas:s.length,total:s.reduce((a,x)=>a+x.total,0),ganancia:s.reduce((a,x)=>a+(x.total-(x.cost||0)*x.qty),0)});
+  data.sales=[];
+  document.getElementById('cierreModal').classList.remove('show');
+  save();
+};
+
+// ── MONEY ─────────────────────────────────────────────────────────────────────
+window.openAddMove=()=>document.getElementById('moveModal').classList.add('show');
+window.closeMoveModal=()=>document.getElementById('moveModal').classList.remove('show');
+window.saveMove=()=>{
+  const amount=+document.getElementById('moveAmount').value; if(!amount)return;
+  if(!data.moves) data.moves=[];
+  data.moves.push({id:'m'+Date.now(),date:today(),type:document.getElementById('moveType').value,cat:document.getElementById('moveCat').value,amount,desc:document.getElementById('moveDesc').value});
+  document.getElementById('moveAmount').value=document.getElementById('moveDesc').value='';
+  document.getElementById('moveModal').classList.remove('show'); save();
+};
+window.delMove=id=>{ data.moves=data.moves.filter(x=>x.id!=id); save(); };
+
+// ── NOTES ─────────────────────────────────────────────────────────────────────
+window.openAddNote=()=>document.getElementById('noteModal').classList.add('show');
+window.closeNoteModal=()=>document.getElementById('noteModal').classList.remove('show');
+window.saveNote=()=>{
+  const titulo=document.getElementById('noteTitulo').value.trim(); if(!titulo)return;
+  if(!data.notes) data.notes=[];
+  data.notes.unshift({id:'n'+Date.now(),date:today(),titulo,text:document.getElementById('noteText').value,prio:document.getElementById('notePrio').value,fecha:document.getElementById('noteFecha').value,done:false});
+  document.getElementById('noteTitulo').value=document.getElementById('noteText').value=document.getElementById('noteFecha').value='';
+  document.getElementById('noteModal').classList.remove('show'); save();
+};
+window.delNote=id=>{ data.notes=data.notes.filter(x=>x.id!=id); save(); };
+window.toggleNote=id=>{ const n=(data.notes||[]).find(x=>x.id==id); if(n){n.done=!n.done;save();} };
+
+// ── EXPORT / IMPORT ───────────────────────────────────────────────────────────
+window.exportData=()=>{ const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([JSON.stringify(data,null,2)],{type:'application/json'}));a.download='backup-'+today()+'.json';a.click(); };
+window.importData=e=>{ const f=e.target.files[0];if(!f)return;const r=new FileReader();r.onload=()=>{data=JSON.parse(r.result);save();};r.readAsText(f); };
+
+// ── POMODORO ──────────────────────────────────────────────────────────────────
+let pomoTotal=25*60,pomoLeft=25*60,pomoRunning=false,pomoInterval=null;
+const CIRC=2*Math.PI*50;
+function renderPomo(){
+  const m=String(Math.floor(pomoLeft/60)).padStart(2,'0'),s=String(pomoLeft%60).padStart(2,'0');
+  const el=document.getElementById('pomoTime'); if(el) el.textContent=m+':'+s;
+  const ring=document.getElementById('pomoRing'); if(ring) ring.style.strokeDashoffset=CIRC*(1-pomoLeft/pomoTotal);
+}
+window.pomoStart=()=>{ if(pomoRunning)return;pomoRunning=true;pomoInterval=setInterval(()=>{if(pomoLeft<=0){clearInterval(pomoInterval);pomoRunning=false;return;}pomoLeft--;renderPomo();},1000); };
+window.pomoPause=()=>{ pomoRunning=false;clearInterval(pomoInterval); };
+window.pomoReset=()=>{ pomoPause();pomoLeft=pomoTotal;renderPomo(); };
+window.pomoSet=min=>{ pomoPause();pomoTotal=pomoLeft=min*60;renderPomo(); };
+renderPomo();
+
+// ── RENDER ────────────────────────────────────────────────────────────────────
+function render(){
+  if(!data||!currentUser)return;
+  const name=currentUser.displayName||data.name||'Usuario';
+  const firstName=name.split(' ')[0];
+  document.getElementById('profileName').textContent=name;
+  document.getElementById('profileEmail').textContent=currentUser.email||'';
+  document.getElementById('settingsName').textContent=name;
+  document.getElementById('settingsEmail').textContent=currentUser.email||'';
+  const photo=currentUser.photoURL;
+  document.getElementById('avatar').innerHTML=photo?`<img src="${photo}" alt="">`:'🌙';
+  document.getElementById('hello').textContent='Hola, '+firstName+' 🌙';
+
+  // Frases: rotan por día del año
+  const dayOfYear=Math.floor((new Date()-new Date(new Date().getFullYear(),0,0))/86400000);
+  const q=QUOTES[dayOfYear%QUOTES.length];
+  document.getElementById('homeQuote').textContent='"'+q+'"';
+  document.getElementById('quoteSide').textContent='"'+QUOTES[(dayOfYear+5)%QUOTES.length]+'"';
+  document.getElementById('loginQuote').textContent='"'+QUOTES[Math.floor(Math.random()*QUOTES.length)]+'"';
+
+  const fechaHoy=new Date().toLocaleDateString('es-CL',{weekday:'long',day:'numeric',month:'long'});
+  document.getElementById('homeDate').textContent=fechaHoy.charAt(0).toUpperCase()+fechaHoy.slice(1);
+
+  // Stats home
+  const certs=(data.certs||[]).filter(c=>c.fecha&&daysUntil(c.fecha)>=0).sort((a,b)=>daysUntil(a.fecha)-daysUntil(b.fecha));
+  const nextCert=certs[0];
+  document.getElementById('nextEval').textContent=nextCert?(daysUntil(nextCert.fecha)===0?'Hoy':daysUntil(nextCert.fecha)+' días'):'—';
+  document.getElementById('nextEvalName').textContent=nextCert?(nextCert.nombre||nextCert.ramo):'sin certámenes';
+  const allTemas=(data.certs||[]).flatMap(c=>c.temas||[]);
+  const done=allTemas.filter(t=>t.done).length,total=allTemas.length;
+  document.getElementById('topicsStat').textContent=done+'/'+total;
+  document.getElementById('topicsBar').style.width=total?done/total*100+'%':'0%';
+  const sToday=(data.sales||[]).filter(s=>s.date===today()).reduce((a,s)=>a+s.total,0);
+  document.getElementById('salesToday').textContent=fmt(sToday);
+  const shopInc=(data.sales||[]).filter(s=>s.date.startsWith(month())).reduce((a,s)=>a+s.total,0);
+  const movInc=(data.moves||[]).filter(m=>m.type==='ingreso'&&m.date.startsWith(month())).reduce((a,m)=>a+m.amount,0);
+  const movExp=(data.moves||[]).filter(m=>m.type==='gasto'&&m.date.startsWith(month())).reduce((a,m)=>a+m.amount,0);
+  document.getElementById('balanceMonth').textContent=fmt(shopInc+movInc-movExp);
+
+  // Bloques sugeridos home (hoy)
+  const suggestions=getStudySuggestions();
+  const todaySugg=suggestions.filter(s=>s.day===getTodayDow());
+  document.getElementById('todayBlocks').innerHTML=todaySugg.length
+    ? todaySugg.map(s=>`<div class="item"><div><b>${s.cert}</b><div class="tiny" style="color:var(--muted)">${BLOCKS[s.block]}</div></div><span class="badge">${['','baja','media','alta'][s.diff]||''}</span></div>`).join('')
+    : '<p class="sub">Sin bloques para hoy. Agrega certámenes en Estudio.</p>';
+
+  // SCHEDULE
+  renderScheduleView();
+
+  // CERTS
+  document.getElementById('certsList').innerHTML=(data.certs||[]).length
+    ? data.certs.map(cert=>{
+        const dl=cert.fecha?daysUntil(cert.fecha):null;
+        const temas=cert.temas||[];
+        const doneT=temas.filter(t=>t.done).length;
+        const urgClass=dl!==null?(dl<=3?'bad':dl<=7?'navy':'sage'):'sage';
+        return `<div class="cert-chip">
+          <div class="cert-head">
+            <div style="flex:1">
+              <div class="cert-name">${cert.ramo} <span class="badge ${urgClass}">${cert.nombre||'Evaluación'}</span></div>
+              <div class="cert-meta">${cert.fecha?cert.fecha+' · ':''} ${dl!==null?(dl===0?'¡Hoy!':dl+' días'):'sin fecha'} · dif. ${['','baja','media','alta'][cert.diff]||cert.diff} · ${doneT}/${temas.length} temas</div>
+              <div class="bar" style="margin-top:6px;max-width:180px"><i style="width:${temas.length?doneT/temas.length*100:0}%"></i></div>
+            </div>
+            <button class="btn bad" onclick="delCert(${cert.id})">✕</button>
+          </div>
+          <div>
+            ${temas.map(t=>`<div class="tema-row">
+              <input type="checkbox" id="t${t.id}" ${t.done?'checked':''} onchange="toggleTema(${cert.id},${t.id})">
+              <label for="t${t.id}" class="${t.done?'done':''}">${t.name}</label>
+              <button class="del-tema" onclick="delTema(${cert.id},${t.id})">✕</button>
+            </div>`).join('')}
+          </div>
+          <div style="display:flex;gap:6px;margin-top:10px">
+            <input id="addTemaInput_${cert.id}" placeholder="Agregar tema..." style="flex:1;font-size:12px;padding:6px 10px" onkeydown="if(event.key==='Enter'){event.preventDefault();addTemaToCert(${cert.id})}">
+            <button class="btn sm sage" onclick="addTemaToCert(${cert.id})">+</button>
+          </div>
+        </div>`;
+      }).join('')
+    : '<p class="sub">Agrega tu primer certamen con el botón de arriba.</p>';
+
+  // SHOP
+  const sales=data.sales||[], prods=data.products||[];
+  const totalSales=sales.reduce((a,s)=>a+s.total,0);
+  document.getElementById('shopTotal').textContent=fmt(totalSales);
+  document.getElementById('shopHoy').textContent=fmt(sales.filter(s=>s.date===today()).reduce((a,s)=>a+s.total,0));
+  const by={};sales.forEach(s=>{by[s.product]=(by[s.product]||0)+s.total});
+  const star=Object.entries(by).sort((a,b)=>b[1]-a[1])[0];
+  document.getElementById('shopStar').textContent=star?star[0]:'—';
+  document.getElementById('shopStarSub').textContent=star?fmt(star[1]):'';
+
+  // Ventas semana
+  const dn=['Lun','Mar','Mié','Jue','Vie','Sáb','Dom'];
+  const hoyDow=new Date().getDay();
+  const startW=new Date(); startW.setDate(startW.getDate()-(hoyDow===0?6:hoyDow-1)); startW.setHours(0,0,0,0);
+  const weekDays=Array.from({length:7},(_,i)=>{ const d=new Date(startW);d.setDate(d.getDate()+i);return d.toISOString().slice(0,10); });
+  document.getElementById('ventasSemana').innerHTML=weekDays.map((d,i)=>{
+    const tot=sales.filter(s=>s.date===d).reduce((a,s)=>a+s.total,0);
+    return `<div class="dia-cell ${d===today()?'hoy':''}"><div class="dn">${dn[i]}</div><div class="dt">${tot>0?fmt(tot):'—'}</div></div>`;
+  }).join('');
+
+  // Inventario
+  document.getElementById('saleProduct').innerHTML=prods.map(p=>`<option value="${p.id}">${p.name} · ${fmt(p.price)}</option>`).join('');
+  document.getElementById('inventarioBody').innerHTML=prods.length
+    ? prods.map(p=>{
+        const totalStock=(p.show||0)+(p.home||0);
+        const ganUnit=(p.price||0)-(p.cost||0);
+        const ganTotal=ganUnit*totalStock;
+        return `<tr>
+          <td><b>${p.name}</b><div class="tiny" style="color:var(--muted)">${p.channel||'—'}</div></td>
+          <td>${fmt(p.price)}</td>
+          <td>${fmt(p.cost||0)}</td>
+          <td style="color:${ganUnit>0?'var(--saged)':'var(--bad)'}">${fmt(ganUnit)}</td>
+          <td><span class="badge ${(p.show||0)<=1?'bad':'sage'}">${p.show||0}</span></td>
+          <td><span class="badge ${(p.home||0)<=2?'':'navy'}">${p.home||0}</span></td>
+          <td style="color:var(--saged);font-weight:600">${fmt(ganTotal)}</td>
+          <td style="display:flex;gap:4px">
+            <button class="btn sm ghost" onclick="openAddProduct('${p.id}')">✏️</button>
+            <button class="btn bad" onclick="delProduct('${p.id}')">✕</button>
+          </td>
+        </tr>`;
+      }).join('')
+    : '<tr><td colspan="8" style="color:var(--muted);text-align:center;padding:16px">Sin productos. Agrega con el botón +</td></tr>';
+
+  // Historial ventas
+  document.getElementById('salesBody').innerHTML=[...(data.sales||[])].reverse().slice(0,25).map(s=>{
+    const ganancia=(s.unit-(s.cost||0))*s.qty;
+    return `<tr>
+      <td>${s.date}</td><td>${s.product}</td><td>${s.qty}</td>
+      <td>${fmt(s.total)}</td>
+      <td style="color:${ganancia>0?'var(--saged)':'var(--bad)'}">${fmt(ganancia)}</td>
+      <td><button class="btn bad" onclick="delSale('${s.id}')">✕</button></td>
+    </tr>`;
+  }).join('') || '<tr><td colspan="6" style="color:var(--muted);text-align:center;padding:12px">Sin ventas registradas</td></tr>';
+
+  // MONEY
+  const inc=shopInc+movInc;
+  document.getElementById('incMonth').textContent=fmt(inc);
+  document.getElementById('expMonth').textContent=fmt(movExp);
+  document.getElementById('balanceMes').textContent=fmt(inc-movExp);
+  document.getElementById('balanceMes').style.color=inc-movExp>=0?'var(--saged)':'var(--bad)';
+  const cats={};(data.moves||[]).filter(m=>m.type==='gasto'&&m.date.startsWith(month())).forEach(m=>cats[m.cat]=(cats[m.cat]||0)+m.amount);
+  const maxCat=Object.entries(cats).sort((a,b)=>b[1]-a[1])[0];
+  document.getElementById('bigCat').textContent=maxCat?maxCat[0]:'—';
+  const ctot=Object.values(cats).reduce((a,b)=>a+b,0);
+  document.getElementById('moneyBars').innerHTML=Object.entries(cats).sort((a,b)=>b[1]-a[1]).map(([k,v])=>`
+    <div style="margin-bottom:10px">
+      <div style="display:flex;justify-content:space-between;font-size:12px;margin-bottom:4px">
+        <span><b>${k}</b></span><span>${fmt(v)} · ${ctot?Math.round(v/ctot*100):0}%</span>
+      </div>
+      <div class="bar"><i style="width:${ctot?v/ctot*100:0}%"></i></div>
+    </div>`).join('') || '<p class="sub">Sin gastos este mes.</p>';
+  document.getElementById('moneyBody').innerHTML=[...(data.moves||[])].reverse().slice(0,30).map(m=>`<tr>
+    <td>${m.date}</td>
+    <td><span class="badge ${m.type==='ingreso'?'sage':'bad'}">${m.type}</span></td>
+    <td>${m.cat}</td><td>${m.desc||'—'}</td>
+    <td style="font-weight:600">${fmt(m.amount)}</td>
+    <td><button class="btn bad" onclick="delMove('${m.id}')">✕</button></td>
+  </tr>`).join('') || '<tr><td colspan="6" style="color:var(--muted);text-align:center;padding:12px">Sin movimientos.</td></tr>';
+
+  // NOTAS
+  const prioColor={alta:'prio-alta',media:'prio-media',baja:'prio-baja'};
+  const prioLabel={alta:'🔴 Alta',media:'🟡 Media',baja:'🟢 Baja'};
+  document.getElementById('notesList').innerHTML=(data.notes||[]).length
+    ? data.notes.map(n=>`
+        <div class="nota-card ${prioColor[n.prio]||''} ${n.done?'done-card':''}">
+          <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:8px">
+            <div style="display:flex;align-items:center;gap:8px;flex:1">
+              <input type="checkbox" ${n.done?'checked':''} onchange="toggleNote('${n.id}')" style="width:15px;height:15px;accent-color:var(--lavd);cursor:pointer;flex-shrink:0">
+              <b style="${n.done?'text-decoration:line-through;opacity:.5':''};font-size:14px">${n.titulo}</b>
+              <span class="badge">${prioLabel[n.prio]||n.prio}</span>
+            </div>
+            <button class="btn bad" onclick="delNote('${n.id}')">✕</button>
+          </div>
+          ${n.text?`<p style="margin:8px 0 0 23px;font-size:13px;color:var(--muted);line-height:1.5">${n.text}</p>`:''}
+          ${n.fecha?`<div class="tiny" style="margin-top:6px;margin-left:23px;color:var(--muted)">📅 Límite: ${n.fecha}</div>`:''}
+          <div class="tiny" style="margin-top:4px;margin-left:23px;color:var(--muted)">Creado: ${n.date}</div>
+        </div>`).join('')
+    : '<p class="sub">Sin recordatorios. Agrega con el botón +</p>';
+}
+
+// Login quote inicial
+document.getElementById('loginQuote').textContent='"'+QUOTES[Math.floor(Math.random()*QUOTES.length)]+'"';
+</script>
+</body>
+</html>

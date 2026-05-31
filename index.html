@@ -1,0 +1,766 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Mi rinconcito</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&family=Playfair+Display:wght@500;700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#fbf7f0;--card:#fffdf9;--ink:#25212a;--muted:#827989;--line:#ebe2d8;--lav:#c9b8ef;--lav2:#f0eafd;--sage:#a9cdb3;--sage2:#eaf5ed;--navy:#14243d;--rose:#ead0d8;--gold:#d2a76f;--bad:#c76565;--shadow:0 18px 45px rgba(35,25,52,.08)}
+*{box-sizing:border-box}body{margin:0;background:radial-gradient(circle at top left,#f1eafe,transparent 34%),radial-gradient(circle at bottom right,#e5f4ea,transparent 30%),var(--bg);font-family:'DM Sans',sans-serif;color:var(--ink)}
+button,input,select,textarea{font:inherit}button{cursor:pointer}
+.app{display:grid;grid-template-columns:245px 1fr;min-height:100vh}
+.side{background:linear-gradient(180deg,#162641,#101a2d);color:#fff;padding:24px;position:sticky;top:0;height:100vh;overflow-y:auto}
+.brand{font-family:'Playfair Display',serif;font-size:29px;margin:0}.tiny{font-size:12px;color:rgba(255,255,255,.55)}
+.profile-pill{margin:22px 0;padding:14px;border:1px solid rgba(255,255,255,.12);border-radius:18px;background:rgba(255,255,255,.06)}
+.avatar{width:42px;height:42px;border-radius:50%;display:grid;place-items:center;background:var(--lav);color:#1b1630;font-size:22px;margin-bottom:8px}
+.avatar img{width:42px;height:42px;border-radius:50%;object-fit:cover}
+.nav{display:grid;gap:7px;margin-top:14px}
+.nav button{border:0;background:transparent;color:rgba(255,255,255,.62);text-align:left;padding:11px 12px;border-radius:12px}
+.nav button.active,.nav button:hover{background:rgba(255,255,255,.1);color:#fff}
+.quote{margin-top:24px;color:rgba(255,255,255,.45);font-size:12px;line-height:1.5;font-style:italic;padding:12px;border-top:1px solid rgba(255,255,255,.08)}
+.main{padding:28px;max-width:1180px;width:100%;margin:auto}
+.page{display:none}.page.active{display:block}
+.top{display:flex;justify-content:space-between;gap:16px;align-items:flex-start;margin-bottom:20px}
+h1,h2,h3{font-family:'Playfair Display',serif;margin:0}h1{font-size:36px}.sub{color:var(--muted);margin-top:6px}
+.grid{display:grid;gap:16px}.g2{grid-template-columns:repeat(2,minmax(0,1fr))}.g3{grid-template-columns:repeat(3,minmax(0,1fr))}.g4{grid-template-columns:repeat(4,minmax(0,1fr))}
+.card{background:rgba(255,253,249,.86);backdrop-filter:blur(10px);border:1px solid var(--line);border-radius:22px;padding:18px;box-shadow:var(--shadow)}
+.stat b{font-family:'Playfair Display',serif;font-size:31px;display:block}.stat span,label{color:var(--muted);font-size:12px}
+label{display:block;margin:0 0 5px;text-transform:uppercase;letter-spacing:.06em}
+.row{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:10px}
+input,select,textarea{width:100%;border:1px solid var(--line);background:#f7f1eb;border-radius:12px;padding:10px 12px;color:var(--ink);outline:none}
+textarea{resize:vertical}
+.btn{border:0;background:#7867a9;color:#fff;border-radius:12px;padding:10px 14px;font-weight:700}
+.btn.sage{background:#5f9670}.btn.ghost{background:transparent;color:var(--muted);border:1px solid var(--line)}
+.btn.bad{background:transparent;color:var(--bad);border:1px solid #efd0d0}
+.btn.google{background:#fff;color:#444;border:1px solid var(--line);display:flex;align-items:center;gap:8px;justify-content:center;font-size:15px;padding:12px 20px}
+.btn.google img{width:20px}
+.list{display:grid;gap:10px}
+.item{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:12px;border-radius:15px;background:#f8f1eb;border:1px solid var(--line)}
+.badge{font-size:11px;border-radius:99px;padding:4px 9px;background:var(--lav2);color:#64518f}
+.badge.sage{background:var(--sage2);color:#497c58}.badge.bad{background:#fae7e7;color:var(--bad)}
+.bar{height:9px;background:#e9ded4;border-radius:99px;overflow:hidden}
+.bar i{display:block;height:100%;background:#7867a9;border-radius:99px;transition:width .4s}
+
+/* LOGIN SCREEN */
+.login-screen{position:fixed;inset:0;background:linear-gradient(135deg,#162641 0%,#1e1040 50%,#0d1f15 100%);display:flex;flex-direction:column;align-items:center;justify-content:center;z-index:100;gap:24px;text-align:center;padding:24px}
+.login-screen.hidden{display:none}
+.login-logo{font-family:'Playfair Display',serif;font-size:48px;color:#fff;margin:0}
+.login-sub{color:rgba(255,255,255,.55);font-size:15px;max-width:340px;line-height:1.6}
+.login-quote{color:rgba(255,255,255,.35);font-style:italic;font-size:13px;max-width:300px}
+.login-card{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.12);border-radius:24px;padding:28px;width:min(380px,100%)}
+.login-card h3{color:#fff;font-family:'Playfair Display',serif;font-size:22px;margin:0 0 6px}
+.login-card .sub{margin-bottom:20px}
+
+/* SYNC INDICATOR */
+.sync{font-size:11px;color:rgba(255,255,255,.4);display:flex;align-items:center;gap:5px;margin-top:8px}
+.sync-dot{width:7px;height:7px;border-radius:50%;background:#a9cdb3}
+.sync-dot.saving{background:#d2a76f;animation:pulse .8s infinite}
+.sync-dot.error{background:#c76565}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.3}}
+
+.modal{position:fixed;inset:0;background:rgba(15,16,24,.5);display:none;place-items:center;padding:18px;z-index:5}
+.modal.show{display:grid}.modal .card{width:min(520px,100%)}
+.table{width:100%;border-collapse:collapse;font-size:13px}
+.table th{text-align:left;color:var(--muted);font-size:11px;text-transform:uppercase;letter-spacing:.06em}
+.table td,.table th{border-bottom:1px solid var(--line);padding:9px}
+.small{font-size:12px;color:var(--muted)}.hidden{display:none!important}
+
+/* POMODORO */
+.pomo-ring{width:140px;height:140px;margin:0 auto 16px;position:relative}
+.pomo-ring svg{transform:rotate(-90deg)}
+.pomo-ring .track{fill:none;stroke:#e9ded4;stroke-width:8}
+.pomo-ring .prog{fill:none;stroke:#7867a9;stroke-width:8;stroke-linecap:round;transition:stroke-dashoffset .9s linear}
+.pomo-time{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-family:'Playfair Display',serif;font-size:28px;color:var(--ink)}
+.pomo-btns{display:flex;gap:8px;justify-content:center;margin-top:12px}
+
+@media(max-width:760px){
+  .app{grid-template-columns:1fr}.side{position:relative;height:auto}
+  .quote{position:static;margin-top:18px}.main{padding:18px}
+  .g2,.g3,.g4,.row{grid-template-columns:1fr}.top{display:block}
+  .nav{grid-template-columns:repeat(2,1fr)}
+}
+</style>
+</head>
+<body>
+
+<!-- LOGIN SCREEN -->
+<div class="login-screen" id="loginScreen">
+  <p class="login-logo">🌙 Mi rinconcito</p>
+  <p class="login-sub">Un espacio personal para estudiar, organizar tu tienda y guardar lo que importa.</p>
+  <div class="login-card">
+    <h3>Entrar a tu espacio</h3>
+    <p class="sub" style="color:rgba(255,255,255,.45);margin-bottom:20px">Cada persona tiene su propio espacio separado. Tus datos se guardan en la nube.</p>
+    <button class="btn google" onclick="loginGoogle()" style="width:100%">
+      <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" alt="Google">
+      Entrar con Google
+    </button>
+    <p id="loginError" style="color:#ead0d8;font-size:12px;margin-top:10px;display:none"></p>
+  </div>
+  <p class="login-quote" id="loginQuote"></p>
+</div>
+
+<div class="app" id="appShell" style="display:none">
+<aside class="side">
+  <h2 class="brand">Mi rinconcito</h2>
+  <div class="tiny">dashboard personal aesthetic</div>
+  <div class="profile-pill">
+    <div class="avatar" id="avatar">🌙</div>
+    <b id="profileName">—</b>
+    <div class="tiny" id="profileEmail"></div>
+    <div class="sync"><div class="sync-dot" id="syncDot"></div><span id="syncLabel">sincronizado</span></div>
+    <button class="btn ghost" style="margin-top:10px;color:#fff;border-color:rgba(255,255,255,.2);width:100%" onclick="doSignOut()">Cerrar sesión</button>
+  </div>
+  <div class="nav" id="nav"></div>
+  <div class="quote" id="quote"></div>
+</aside>
+
+<main class="main">
+
+<!-- INICIO -->
+<section id="home" class="page active">
+  <div class="top">
+    <div><h1 id="hello">Hola 🌙</h1><p class="sub">Un lugar amable para estudiar, vender y respirar.</p></div>
+    <button class="btn ghost" onclick="exportData()">Exportar backup</button>
+  </div>
+  <div class="grid g4">
+    <div class="card stat"><span>Próxima evaluación</span><b id="nextEval">—</b><small id="nextEvalName" class="small">sin fechas</small></div>
+    <div class="card stat"><span>Temas listos</span><b id="topicsStat">0/0</b><div class="bar"><i id="topicsBar" style="width:0%"></i></div></div>
+    <div class="card stat"><span>Ventas hoy</span><b id="salesToday">$0</b><small class="small">mi tienda</small></div>
+    <div class="card stat"><span>Balance mes</span><b id="balanceMonth">$0</b><small class="small">ingresos - gastos</small></div>
+  </div>
+  <div class="grid g2" style="margin-top:16px">
+    <div class="card"><h3>Bloques sugeridos</h3><div id="todayBlocks" class="list"></div></div>
+    <div class="card">
+      <h3>Pequeño momento</h3>
+      <p id="moment" class="sub" style="margin-bottom:12px"></p>
+      <label>Algo lindo de hoy</label>
+      <textarea id="gratitude" rows="3" placeholder="Un momento, pensamiento, o lo que quieras recordar..." oninput="setField('gratitude',this.value)"></textarea>
+    </div>
+  </div>
+</section>
+
+<!-- ESTUDIO -->
+<section id="study" class="page">
+  <h1>Estudio</h1><p class="sub">Ramos, temas y bloques recomendados para la semana.</p>
+  <div class="grid g2" style="margin-top:16px">
+    <div class="card">
+      <h3>Agregar ramo</h3>
+      <div class="row">
+        <div><label>Ramo</label><input id="courseName" placeholder="Cálculo, Micro, Conta..."></div>
+        <div><label>Dificultad</label><select id="courseDiff"><option>alta</option><option>media</option><option>baja</option></select></div>
+      </div>
+      <div class="row">
+        <div><label>Evaluación</label><input id="courseEval" placeholder="Certamen 1"></div>
+        <div><label>Fecha</label><input id="courseDate" type="date"></div>
+      </div>
+      <button class="btn" onclick="addCourse()">Agregar ramo</button>
+    </div>
+    <div class="card">
+      <h3>Nuevo tema</h3>
+      <div class="row">
+        <div><label>Ramo</label><select id="topicCourse"></select></div>
+        <div><label>Dificultad</label><select id="topicDiff"><option>alta</option><option>media</option><option>baja</option></select></div>
+      </div>
+      <label>Tema</label>
+      <input id="topicName" placeholder="Derivadas, Elasticidad, Asientos..." style="margin-bottom:10px">
+      <button class="btn sage" onclick="addTopic()">Agregar tema</button>
+    </div>
+  </div>
+  <div class="grid g2" style="margin-top:16px">
+    <div class="card"><h3>Ramos y temas</h3><div id="coursesList" class="list"></div></div>
+    <div class="card">
+      <h3>Modo de semana</h3>
+      <p class="sub">Aplicado: más bloques y tiempo. Suave: estudiante constante sin agotarse.</p>
+      <div style="display:flex;gap:8px;margin-bottom:14px">
+        <button class="btn" onclick="setField('studyMode','aplicado')">🔥 Aplicado</button>
+        <button class="btn sage" onclick="setField('studyMode','suave')">🍃 Suave</button>
+      </div>
+      <div id="studyPlan" class="list"></div>
+    </div>
+  </div>
+  <!-- POMODORO -->
+  <div class="card" style="margin-top:16px;max-width:340px">
+    <h3 style="margin-bottom:14px">⏱ Pomodoro</h3>
+    <div class="pomo-ring">
+      <svg viewBox="0 0 140 140" width="140" height="140">
+        <circle class="track" cx="70" cy="70" r="58"/>
+        <circle class="prog" id="pomoRing" cx="70" cy="70" r="58" stroke-dasharray="364" stroke-dashoffset="0"/>
+      </svg>
+      <div class="pomo-time" id="pomoTime">25:00</div>
+    </div>
+    <div class="pomo-btns">
+      <button class="btn" onclick="pomoStart()">▶ Iniciar</button>
+      <button class="btn ghost" onclick="pomoPause()">⏸</button>
+      <button class="btn ghost" onclick="pomoReset()">↺</button>
+    </div>
+    <div style="display:flex;gap:8px;justify-content:center;margin-top:10px">
+      <button class="btn ghost" style="font-size:12px" onclick="pomoSet(25)">25 min</button>
+      <button class="btn ghost" style="font-size:12px" onclick="pomoSet(50)">50 min</button>
+      <button class="btn ghost" style="font-size:12px" onclick="pomoSet(5)">5 descanso</button>
+    </div>
+  </div>
+</section>
+
+<!-- TIENDA -->
+<section id="shop" class="page">
+  <h1>Mi tienda</h1><p class="sub">Inventario, stock y ventas.</p>
+  <div class="grid g3" style="margin-top:16px">
+    <div class="card stat"><span>Total histórico</span><b id="shopTotal">$0</b></div>
+    <div class="card stat"><span>Unidades vendidas</span><b id="shopUnits">0</b></div>
+    <div class="card stat"><span>Producto estrella</span><b id="shopStar" style="font-size:22px">—</b></div>
+  </div>
+  <div class="grid g2" style="margin-top:16px">
+    <div class="card">
+      <h3>Stock actual</h3>
+      <div id="stockList" class="list"></div>
+      <button class="btn ghost" style="margin-top:12px;width:100%" onclick="openAddProduct()">+ Agregar producto</button>
+    </div>
+    <div class="card">
+      <h3>Registrar venta</h3>
+      <div class="row">
+        <div><label>Producto</label><select id="saleProduct"></select></div>
+        <div><label>Cantidad</label><input id="saleQty" type="number" min="1" value="1"></div>
+      </div>
+      <button class="btn sage" onclick="addSale()">Registrar venta</button>
+      <h3 style="margin-top:18px">Análisis por producto</h3>
+      <div id="productAnalysis" class="list" style="margin-top:10px"></div>
+    </div>
+  </div>
+  <div class="card" style="margin-top:16px">
+    <h3>Historial de ventas</h3>
+    <div id="salesHistory" style="margin-top:10px"></div>
+  </div>
+</section>
+
+<!-- GASTOS -->
+<section id="money" class="page">
+  <h1>Gastos</h1><p class="sub">Porcentajes estilo Notion, pero tuyo.</p>
+  <div class="grid g3" style="margin-top:16px">
+    <div class="card stat"><span>Ingresos mes</span><b id="incMonth">$0</b></div>
+    <div class="card stat"><span>Gastos mes</span><b id="expMonth">$0</b></div>
+    <div class="card stat"><span>Mayor categoría</span><b id="bigCat" style="font-size:22px">—</b></div>
+  </div>
+  <div class="grid g2" style="margin-top:16px">
+    <div class="card">
+      <h3>Nuevo movimiento</h3>
+      <div class="row">
+        <div><label>Tipo</label><select id="moveType"><option value="gasto">Gasto</option><option value="ingreso">Ingreso</option></select></div>
+        <div><label>Categoría</label><select id="moveCat"><option>Comida</option><option>Transporte</option><option>Ropa</option><option>Educación</option><option>Pyme</option><option>Salud</option><option>Ocio</option><option>Otro</option></select></div>
+      </div>
+      <div class="row">
+        <div><label>Monto ($)</label><input id="moveAmount" type="number" placeholder="0"></div>
+        <div><label>Detalle</label><input id="moveDesc" placeholder="ej. almuerzo, uber..."></div>
+      </div>
+      <button class="btn" onclick="addMove()">Guardar movimiento</button>
+    </div>
+    <div class="card">
+      <h3>Distribución del mes</h3>
+      <div id="moneyBars" class="list" style="margin-top:10px"></div>
+    </div>
+  </div>
+  <div class="card" style="margin-top:16px">
+    <h3>Historial</h3>
+    <div id="moneyHistory" style="margin-top:10px"></div>
+  </div>
+</section>
+
+<!-- NOTAS -->
+<section id="notes" class="page">
+  <h1>Notas</h1><p class="sub">Ideas, recordatorios y cosas que no quieres perder.</p>
+  <div class="card" style="margin-top:16px">
+    <textarea id="noteText" rows="4" placeholder="Escribe algo..."></textarea>
+    <button class="btn" onclick="addNote()" style="margin-top:10px">Guardar nota</button>
+  </div>
+  <div id="notesList" class="grid" style="margin-top:16px"></div>
+</section>
+
+<!-- AJUSTES -->
+<section id="settings" class="page">
+  <h1>Ajustes</h1><p class="sub">Gestión de tu cuenta y datos.</p>
+  <div class="grid g2" style="margin-top:16px">
+    <div class="card">
+      <h3>Tu cuenta</h3>
+      <div class="item" style="margin-top:12px">
+        <div>
+          <b id="settingsName">—</b>
+          <div class="small" id="settingsEmail">—</div>
+        </div>
+        <button class="btn bad" onclick="doSignOut()">Salir</button>
+      </div>
+      <p class="sub" style="margin-top:12px">Tus datos están guardados en Firebase bajo tu cuenta de Google. Puedes acceder desde cualquier dispositivo.</p>
+    </div>
+    <div class="card">
+      <h3>Backup manual</h3>
+      <p class="sub">Exporta todos tus datos como JSON por si acaso.</p>
+      <button class="btn" onclick="exportData()" style="margin-top:12px">Exportar backup JSON</button>
+      <div style="margin-top:14px">
+        <label>Importar backup</label>
+        <input type="file" accept=".json" onchange="importData(event)">
+      </div>
+    </div>
+  </div>
+  <div class="card" style="margin-top:16px">
+    <h3>Agregar producto al inventario</h3>
+    <p class="sub">Puedes agregar, editar o eliminar productos de tu tienda aquí o desde la sección Tienda.</p>
+    <div class="row" style="margin-top:12px">
+      <div><label>Nombre</label><input id="newProdName" placeholder="Milka, bebida..."></div>
+      <div><label>Precio ($)</label><input id="newProdPrice" type="number" placeholder="1000"></div>
+    </div>
+    <div class="row">
+      <div><label>Stock vitrina</label><input id="newProdShow" type="number" value="0"></div>
+      <div><label>Stock bodega</label><input id="newProdHome" type="number" value="0"></div>
+    </div>
+    <button class="btn sage" onclick="addProduct()">Agregar producto</button>
+  </div>
+</section>
+
+</main>
+</div>
+
+<!-- MODAL: agregar producto desde tienda -->
+<div id="addProductModal" class="modal">
+  <div class="card">
+    <h3>Agregar producto</h3>
+    <div class="row" style="margin-top:12px">
+      <div><label>Nombre</label><input id="mpName" placeholder="Milka, bebida..."></div>
+      <div><label>Precio ($)</label><input id="mpPrice" type="number" placeholder="1000"></div>
+    </div>
+    <div class="row">
+      <div><label>Stock vitrina</label><input id="mpShow" type="number" value="0"></div>
+      <div><label>Stock bodega</label><input id="mpHome" type="number" value="0"></div>
+    </div>
+    <div style="display:flex;gap:8px;margin-top:10px">
+      <button class="btn sage" onclick="addProductModal()">Guardar</button>
+      <button class="btn ghost" onclick="closeAddProduct()">Cancelar</button>
+    </div>
+  </div>
+</div>
+
+<script type="module">
+import { auth, provider, db, signInWithPopup, signOut, onAuthStateChanged, doc, setDoc, getDoc, onSnapshot } from './firebase-config.js';
+
+// ─── QUOTES ───────────────────────────────────────────────────────────────────
+const QUOTES = [
+  'Lo esencial es invisible a los ojos.',
+  'Las ballenas no se apuran: avanzan profundo.',
+  'Los días lindos también se construyen con cosas pequeñas.',
+  'Un bloque a la vez, sin pelearse con la vida.',
+  'Volver a intentarlo también cuenta como avanzar.',
+  'No tienes que ser perfecto para ser constante.',
+  'A veces avanzar es solo no rendirse hoy.',
+  'Las cosas pequeñas son las que más se recuerdan.',
+];
+const MOMENTS = [
+  'Toma agua, ordena una cosa chica y vuelve suave.',
+  'Hoy no tiene que ser perfecto para valer.',
+  'Cinco minutos bien hechos salvan más que una hora con culpa.',
+  'Tu versión tranquila también puede ser constante.',
+  'Respira. Ya estás haciendo bastante.',
+];
+const PAGES = [
+  ['home','🌙 Inicio'],['study','📚 Estudio'],['shop','🍫 Tienda'],
+  ['money','💸 Gastos'],['notes','✏️ Notas'],['settings','⚙️ Ajustes']
+];
+const SEED_PRODUCTS = [
+  {id:'barrita-cereal',name:'Barrita cereal',price:200,show:0,home:14},
+  {id:'chokita',name:'Chokita',price:450,show:1,home:5},
+  {id:'bebida',name:'Bebida',price:800,show:2,home:6},
+  {id:'krapulito',name:'Krapulito',price:300,show:0,home:0},
+  {id:'sahne-nuss',name:'Sahne-nuss',price:700,show:4,home:4},
+  {id:'mani',name:'Maní',price:550,show:1,home:5},
+  {id:'milka',name:'Milka',price:1000,show:0,home:0},
+];
+const SEED_SALES = [
+  {date:'2026-04-27',product:'Milka',qty:1,unit:1000,total:1000},
+  {date:'2026-04-27',product:'Chokita',qty:2,unit:450,total:900},
+  {date:'2026-04-27',product:'Krapulito',qty:3,unit:300,total:900},
+  {date:'2026-04-28',product:'Chokita',qty:1,unit:450,total:450},
+  {date:'2026-04-29',product:'Krapulito',qty:2,unit:300,total:600},
+  {date:'2026-04-29',product:'Sahne-nuss',qty:3,unit:700,total:2100},
+  {date:'2026-04-29',product:'Bebida',qty:1,unit:800,total:800},
+];
+
+// ─── STATE ────────────────────────────────────────────────────────────────────
+let currentUser = null;
+let data = null;
+let saveTimeout = null;
+let unsubscribe = null;
+
+function blank(name, email) {
+  return {
+    name, email,
+    gratitude:'', studyMode:'aplicado',
+    courses:[], topics:[],
+    products: structuredClone(SEED_PRODUCTS),
+    sales: structuredClone(SEED_SALES),
+    moves:[], notes:[]
+  };
+}
+
+// ─── AUTH ─────────────────────────────────────────────────────────────────────
+window.loginGoogle = async () => {
+  try {
+    document.getElementById('loginError').style.display = 'none';
+    await signInWithPopup(auth, provider);
+  } catch(e) {
+    const err = document.getElementById('loginError');
+    err.textContent = 'Error al iniciar sesión: ' + e.message;
+    err.style.display = 'block';
+  }
+};
+
+window.doSignOut = async () => {
+  if(unsubscribe) unsubscribe();
+  await signOut(auth);
+  data = null;
+  currentUser = null;
+  document.getElementById('appShell').style.display = 'none';
+  document.getElementById('loginScreen').classList.remove('hidden');
+};
+
+onAuthStateChanged(auth, async user => {
+  if(user) {
+    currentUser = user;
+    document.getElementById('loginScreen').classList.add('hidden');
+    document.getElementById('appShell').style.display = 'grid';
+    await loadUserData();
+    listenUserData();
+    renderNav();
+    render();
+  } else {
+    document.getElementById('loginScreen').classList.remove('hidden');
+    document.getElementById('appShell').style.display = 'none';
+  }
+});
+
+// ─── FIRESTORE ────────────────────────────────────────────────────────────────
+function userRef() {
+  return doc(db, 'users', currentUser.uid, 'data', 'main');
+}
+
+async function loadUserData() {
+  setSyncState('saving');
+  try {
+    const snap = await getDoc(userRef());
+    if(snap.exists()) {
+      data = snap.data();
+    } else {
+      // Primera vez: crear datos con nombre de Google
+      const name = currentUser.displayName || currentUser.email.split('@')[0];
+      data = blank(name, currentUser.email);
+      await setDoc(userRef(), data);
+    }
+    setSyncState('ok');
+  } catch(e) {
+    setSyncState('error');
+    // fallback a localStorage si hay offline
+    const local = localStorage.getItem('backup_' + currentUser.uid);
+    if(local) data = JSON.parse(local);
+    else data = blank(currentUser.displayName || 'Usuario', currentUser.email);
+  }
+}
+
+function listenUserData() {
+  if(unsubscribe) unsubscribe();
+  unsubscribe = onSnapshot(userRef(), snap => {
+    if(snap.exists()) {
+      data = snap.data();
+      render();
+      setSyncState('ok');
+    }
+  }, () => setSyncState('error'));
+}
+
+function scheduleSave() {
+  setSyncState('saving');
+  if(saveTimeout) clearTimeout(saveTimeout);
+  saveTimeout = setTimeout(async () => {
+    try {
+      await setDoc(userRef(), data);
+      // backup local también
+      localStorage.setItem('backup_' + currentUser.uid, JSON.stringify(data));
+      setSyncState('ok');
+    } catch(e) {
+      setSyncState('error');
+    }
+  }, 800);
+}
+
+function setSyncState(state) {
+  const dot = document.getElementById('syncDot');
+  const lbl = document.getElementById('syncLabel');
+  if(!dot) return;
+  dot.className = 'sync-dot' + (state==='saving'?' saving':state==='error'?' error':'');
+  lbl.textContent = state==='saving'?'guardando...' : state==='error'?'error de conexión' : 'sincronizado';
+}
+
+function save() { scheduleSave(); render(); }
+
+// ─── UTILS ────────────────────────────────────────────────────────────────────
+const fmt = n => '$' + Math.round(n||0).toLocaleString('es-CL');
+const today = () => new Date().toISOString().slice(0,10);
+const month = () => today().slice(0,7);
+function days(d) {
+  const a = new Date(); a.setHours(0,0,0,0);
+  const b = new Date(d+'T12:00:00'); b.setHours(0,0,0,0);
+  return Math.round((b-a)/86400000);
+}
+
+// ─── NAV ──────────────────────────────────────────────────────────────────────
+function renderNav() {
+  document.getElementById('nav').innerHTML = PAGES.map(([id,t],i) =>
+    `<button class="${i===0?'active':''}" onclick="page('${id}',this)">${t}</button>`
+  ).join('');
+}
+
+window.page = (id, btn) => {
+  document.querySelectorAll('.page').forEach(x=>x.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  document.querySelectorAll('.nav button').forEach(x=>x.classList.remove('active'));
+  btn.classList.add('active');
+  render();
+};
+
+window.setField = (k,v) => { if(!data)return; data[k]=v; save(); };
+
+// ─── STUDY ────────────────────────────────────────────────────────────────────
+window.addCourse = () => {
+  const name = document.getElementById('courseName').value.trim();
+  if(!name) return;
+  data.courses.push({id:Date.now(),name,diff:document.getElementById('courseDiff').value,eval:document.getElementById('courseEval').value,date:document.getElementById('courseDate').value});
+  document.getElementById('courseName').value = document.getElementById('courseEval').value = document.getElementById('courseDate').value = '';
+  save();
+};
+window.addTopic = () => {
+  const name = document.getElementById('topicName').value.trim();
+  const cid = +document.getElementById('topicCourse').value;
+  if(!name||!cid) return;
+  data.topics.push({id:Date.now(),courseId:cid,name,diff:document.getElementById('topicDiff').value,done:false});
+  document.getElementById('topicName').value = '';
+  save();
+};
+window.toggleTopic = id => { const t=data.topics.find(x=>x.id==id); if(t){t.done=!t.done;save();} };
+window.delCourse = id => { data.courses=data.courses.filter(x=>x.id!=id); data.topics=data.topics.filter(x=>x.courseId!=id); save(); };
+
+// ─── SHOP ─────────────────────────────────────────────────────────────────────
+window.addSale = () => {
+  const p = data.products.find(x=>x.id==document.getElementById('saleProduct').value);
+  const q = +document.getElementById('saleQty').value||1;
+  if(!p) return;
+  data.sales.push({date:today(),product:p.name,qty:q,unit:p.price,total:p.price*q});
+  p.show = Math.max(0,(p.show||0)-q);
+  save();
+};
+window.addProduct = () => {
+  const name = document.getElementById('newProdName').value.trim();
+  if(!name) return;
+  data.products.push({
+    id: name.toLowerCase().replace(/\s+/g,'-')+'-'+Date.now().toString(36),
+    name, price:+document.getElementById('newProdPrice').value||0,
+    show:+document.getElementById('newProdShow').value||0,
+    home:+document.getElementById('newProdHome').value||0
+  });
+  document.getElementById('newProdName').value = document.getElementById('newProdPrice').value = '';
+  document.getElementById('newProdShow').value = document.getElementById('newProdHome').value = '0';
+  save();
+};
+window.openAddProduct = () => document.getElementById('addProductModal').classList.add('show');
+window.closeAddProduct = () => document.getElementById('addProductModal').classList.remove('show');
+window.addProductModal = () => {
+  const name = document.getElementById('mpName').value.trim();
+  if(!name) return;
+  data.products.push({
+    id: name.toLowerCase().replace(/\s+/g,'-')+'-'+Date.now().toString(36),
+    name, price:+document.getElementById('mpPrice').value||0,
+    show:+document.getElementById('mpShow').value||0,
+    home:+document.getElementById('mpHome').value||0
+  });
+  document.getElementById('mpName').value = document.getElementById('mpPrice').value = '';
+  document.getElementById('mpShow').value = document.getElementById('mpHome').value = '0';
+  document.getElementById('addProductModal').classList.remove('show');
+  save();
+};
+window.delProduct = id => { data.products=data.products.filter(x=>x.id!=id); save(); };
+
+// ─── MONEY ────────────────────────────────────────────────────────────────────
+window.addMove = () => {
+  const amount = +document.getElementById('moveAmount').value;
+  if(!amount) return;
+  data.moves.push({id:Date.now(),date:today(),type:document.getElementById('moveType').value,cat:document.getElementById('moveCat').value,amount,desc:document.getElementById('moveDesc').value});
+  document.getElementById('moveAmount').value = document.getElementById('moveDesc').value = '';
+  save();
+};
+window.delMove = id => { data.moves=data.moves.filter(x=>x.id!=id); save(); };
+
+// ─── NOTES ────────────────────────────────────────────────────────────────────
+window.addNote = () => {
+  const t = document.getElementById('noteText').value.trim();
+  if(!t) return;
+  data.notes.unshift({id:Date.now(),date:new Date().toLocaleDateString('es-CL'),text:t});
+  document.getElementById('noteText').value = '';
+  save();
+};
+window.delNote = id => { data.notes=data.notes.filter(x=>x.id!=id); save(); };
+
+// ─── EXPORT / IMPORT ─────────────────────────────────────────────────────────
+window.exportData = () => {
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(new Blob([JSON.stringify(data,null,2)],{type:'application/json'}));
+  a.download = 'backup-' + (data.name||'datos') + '-' + today() + '.json';
+  a.click();
+};
+window.importData = e => {
+  const f = e.target.files[0]; if(!f)return;
+  const r = new FileReader();
+  r.onload = () => { data = JSON.parse(r.result); save(); };
+  r.readAsText(f);
+};
+
+// ─── POMODORO ─────────────────────────────────────────────────────────────────
+let pomoTotal = 25*60, pomoLeft = 25*60, pomoRunning = false, pomoInterval = null;
+const CIRC = 2 * Math.PI * 58; // 364.4
+
+function renderPomo() {
+  const m = String(Math.floor(pomoLeft/60)).padStart(2,'0');
+  const s = String(pomoLeft%60).padStart(2,'0');
+  document.getElementById('pomoTime').textContent = m+':'+s;
+  const frac = pomoLeft/pomoTotal;
+  document.getElementById('pomoRing').style.strokeDashoffset = CIRC*(1-frac);
+}
+window.pomoStart = () => {
+  if(pomoRunning) return;
+  pomoRunning = true;
+  pomoInterval = setInterval(() => {
+    if(pomoLeft<=0){clearInterval(pomoInterval);pomoRunning=false;return;}
+    pomoLeft--;renderPomo();
+  },1000);
+};
+window.pomoPause = () => { pomoRunning=false; clearInterval(pomoInterval); };
+window.pomoReset = () => { pomoPause(); pomoLeft=pomoTotal; renderPomo(); };
+window.pomoSet = min => { pomoPause(); pomoTotal=pomoLeft=min*60; renderPomo(); };
+renderPomo();
+
+// ─── RENDER ───────────────────────────────────────────────────────────────────
+function render() {
+  if(!data||!currentUser) return;
+
+  // Sidebar
+  const displayName = currentUser.displayName || data.name || 'Usuario';
+  document.getElementById('profileName').textContent = displayName;
+  document.getElementById('profileEmail').textContent = currentUser.email || '';
+  document.getElementById('settingsName').textContent = displayName;
+  document.getElementById('settingsEmail').textContent = currentUser.email || '';
+  const photo = currentUser.photoURL;
+  const avatarEl = document.getElementById('avatar');
+  avatarEl.innerHTML = photo ? `<img src="${photo}" alt="">` : '🌙';
+  document.getElementById('hello').textContent = 'Hola, ' + displayName.split(' ')[0] + ' 🌙';
+  document.getElementById('quote').textContent = '"' + QUOTES[Math.floor(Date.now()/86400000) % QUOTES.length] + '"';
+  document.getElementById('moment').textContent = MOMENTS[Math.floor(Date.now()/86400000) % MOMENTS.length];
+  document.getElementById('gratitude').value = data.gratitude || '';
+  document.getElementById('loginQuote').textContent = '"' + QUOTES[0] + '"';
+
+  // Calc stats
+  const done = data.topics.filter(t=>t.done).length, total = data.topics.length;
+  document.getElementById('topicsStat').textContent = done+'/'+total;
+  document.getElementById('topicsBar').style.width = total ? done/total*100+'%' : '0%';
+  const ev = (data.courses||[]).filter(c=>c.date).sort((a,b)=>new Date(a.date)-new Date(b.date))[0];
+  document.getElementById('nextEval').textContent = ev ? (days(ev.date)<=0?'Hoy':days(ev.date)+' días') : '—';
+  document.getElementById('nextEvalName').textContent = ev ? (ev.eval||'Evaluación')+' · '+ev.name : 'sin fechas';
+  const sToday = (data.sales||[]).filter(s=>s.date===today()).reduce((a,s)=>a+s.total,0);
+  document.getElementById('salesToday').textContent = fmt(sToday);
+  const shopInc = (data.sales||[]).filter(s=>s.date.startsWith(month())).reduce((a,s)=>a+s.total,0);
+  const movInc = (data.moves||[]).filter(m=>m.type==='ingreso'&&m.date.startsWith(month())).reduce((a,m)=>a+m.amount,0);
+  const movExp = (data.moves||[]).filter(m=>m.type==='gasto'&&m.date.startsWith(month())).reduce((a,m)=>a+m.amount,0);
+  document.getElementById('balanceMonth').textContent = fmt(shopInc+movInc-movExp);
+
+  document.getElementById('todayBlocks').innerHTML = blocksHTML();
+
+  // Study
+  const opts = (data.courses||[]).map(c=>`<option value="${c.id}">${c.name}</option>`).join('');
+  document.getElementById('topicCourse').innerHTML = opts;
+  document.getElementById('coursesList').innerHTML = (data.courses||[]).length
+    ? data.courses.map(c => {
+        const ts = (data.topics||[]).filter(t=>t.courseId==c.id);
+        const doneC = ts.filter(t=>t.done).length;
+        return `<div class="item"><div style="flex:1"><b>${c.name}</b> <span class="badge">${c.diff}</span>
+          <div class="small">${c.eval||'Sin evaluación'} ${c.date?'· '+c.date:''}</div>
+          <div class="bar" style="margin:6px 0 8px"><i style="width:${ts.length?doneC/ts.length*100:0}%"></i></div>
+          ${ts.map(t=>`<label style="text-transform:none;letter-spacing:0;margin-top:6px;display:flex;align-items:center;gap:6px"><input type="checkbox" ${t.done?'checked':''} onchange="toggleTopic(${t.id})"> <span style="${t.done?'text-decoration:line-through;opacity:.5':''}">${t.name}</span></label>`).join('')}
+        </div><button class="btn bad" style="align-self:flex-start" onclick="delCourse(${c.id})">✕</button></div>`;
+      }).join('')
+    : '<p class="sub">Agrega tus ramos para empezar.</p>';
+  document.getElementById('studyPlan').innerHTML = blocksHTML();
+
+  // Shop
+  const totalSales = (data.sales||[]).reduce((a,s)=>a+s.total,0);
+  const units = (data.sales||[]).reduce((a,s)=>a+s.qty,0);
+  document.getElementById('shopTotal').textContent = fmt(totalSales);
+  document.getElementById('shopUnits').textContent = units;
+  const by={};(data.sales||[]).forEach(s=>{by[s.product]=(by[s.product]||0)+s.total});
+  const star = Object.entries(by).sort((a,b)=>b[1]-a[1])[0];
+  document.getElementById('shopStar').textContent = star?star[0]:'—';
+  document.getElementById('saleProduct').innerHTML = (data.products||[]).map(p=>`<option value="${p.id}">${p.name} · ${fmt(p.price)}</option>`).join('');
+  document.getElementById('stockList').innerHTML = (data.products||[]).map(p=>`
+    <div class="item">
+      <div><b>${p.name}</b><div class="small">${fmt(p.price)} · vitrina ${p.show||0} · bodega ${p.home||0}</div></div>
+      <div style="display:flex;align-items:center;gap:6px">
+        <span class="badge ${(p.show+p.home)<=2?'bad':'sage'}">stock ${(p.show||0)+(p.home||0)}</span>
+        <button class="btn bad" style="padding:4px 8px;font-size:11px" onclick="delProduct('${p.id}')">✕</button>
+      </div>
+    </div>`).join('');
+  document.getElementById('productAnalysis').innerHTML = Object.entries(by).sort((a,b)=>b[1]-a[1])
+    .map(([k,v])=>`<div><div class="item"><b>${k}</b><span>${fmt(v)}</span></div><div class="bar"><i style="width:${totalSales?v/totalSales*100:0}%"></i></div></div>`).join('')
+    || '<p class="sub">Sin ventas aún.</p>';
+  const recentSales = [...(data.sales||[])].reverse().slice(0,15);
+  document.getElementById('salesHistory').innerHTML = recentSales.length
+    ? `<table class="table"><thead><tr><th>Fecha</th><th>Producto</th><th>Cant.</th><th>Total</th></tr></thead><tbody>`+
+      recentSales.map(s=>`<tr><td>${s.date}</td><td>${s.product}</td><td>${s.qty}</td><td>${fmt(s.total)}</td></tr>`).join('')+
+      `</tbody></table>`
+    : '<p class="sub">Sin ventas aún.</p>';
+
+  // Money
+  const inc = shopInc+movInc;
+  document.getElementById('incMonth').textContent = fmt(inc);
+  document.getElementById('expMonth').textContent = fmt(movExp);
+  const cats={};(data.moves||[]).filter(m=>m.type==='gasto'&&m.date.startsWith(month())).forEach(m=>cats[m.cat]=(cats[m.cat]||0)+m.amount);
+  const maxCat = Object.entries(cats).sort((a,b)=>b[1]-a[1])[0];
+  document.getElementById('bigCat').textContent = maxCat?maxCat[0]:'—';
+  const ctot = Object.values(cats).reduce((a,b)=>a+b,0);
+  document.getElementById('moneyBars').innerHTML = Object.entries(cats).map(([k,v])=>`
+    <div><div class="item"><b>${k}</b><span>${fmt(v)} · ${ctot?Math.round(v/ctot*100):0}%</span></div>
+    <div class="bar"><i style="width:${ctot?v/ctot*100:0}%"></i></div></div>`).join('')
+    || '<p class="sub">Sin gastos este mes.</p>';
+  const recentMoves = [...(data.moves||[])].reverse().slice(0,20);
+  document.getElementById('moneyHistory').innerHTML = recentMoves.length
+    ? `<table class="table"><thead><tr><th>Fecha</th><th>Tipo</th><th>Categoría</th><th>Detalle</th><th>Monto</th><th></th></tr></thead><tbody>`+
+      recentMoves.map(m=>`<tr><td>${m.date}</td><td><span class="badge ${m.type==='ingreso'?'sage':'bad'}">${m.type}</span></td><td>${m.cat}</td><td>${m.desc||'—'}</td><td>${fmt(m.amount)}</td><td><button class="btn bad" style="padding:3px 7px;font-size:11px" onclick="delMove(${m.id})">✕</button></td></tr>`).join('')+
+      `</tbody></table>`
+    : '<p class="sub">Sin movimientos.</p>';
+
+  // Notes
+  document.getElementById('notesList').innerHTML = (data.notes||[]).map(n=>`
+    <div class="card"><div class="small">${n.date}</div><p style="margin:8px 0">${n.text}</p>
+    <button class="btn bad" onclick="delNote(${n.id})">Borrar</button></div>`).join('')
+    || '<p class="sub">Sin notas aún.</p>';
+}
+
+function blocksHTML() {
+  if(!data) return '';
+  const pending = (data.topics||[]).filter(t=>!t.done).sort((a,b)=>({alta:0,media:1,baja:2}[a.diff]-{alta:0,media:1,baja:2}[b.diff]));
+  const n = data.studyMode==='suave'?3:5;
+  return pending.slice(0,n).map(t=>{
+    const c = (data.courses||[]).find(c=>c.id===t.courseId);
+    const mins = data.studyMode==='suave'?(t.diff==='alta'?60:45):(t.diff==='alta'?90:75);
+    return `<div class="item"><div><b>${t.name}</b><div class="small">${c?c.name:'Ramo'} · ${mins} min</div></div>
+      <span class="badge ${data.studyMode==='suave'?'sage':''}">${data.studyMode}</span></div>`;
+  }).join('') || '<p class="sub">No hay temas pendientes.</p>';
+}
+
+// Login quote
+document.getElementById('loginQuote').textContent = '"' + QUOTES[Math.floor(Math.random()*QUOTES.length)] + '"';
+</script>
+</body>
+</html>
